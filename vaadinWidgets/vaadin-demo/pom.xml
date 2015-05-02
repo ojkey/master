@@ -86,7 +86,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>tm.kod</groupId>
-			<artifactId>numberfield</artifactId>
+			<artifactId>numberfield7</artifactId>
 			<version>${version}</version>
 		</dependency>
 		<dependency>
