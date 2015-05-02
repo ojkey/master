@@ -1,12 +1,8 @@
-# VaadinWidgets Add-on Projects for Vaadin 7
-
-VaadinWidgets has UI component add-ons for Vaadin 7:
-1. NumberField
-2. WebCam
+# NumberField Add-on component for Vaadin 7
 
 ## Online demo
 
-Try the add-on demo at <url of the online demo>
+Try the add-on demo at <url http://ojkey.jelastic.servint.net/numberfield/>
 
 ## Download release
 

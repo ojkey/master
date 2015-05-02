@@ -8,9 +8,9 @@
     <name>Vaadin Widgets Add-on Root Project</name>
 
     <modules>
-        <module>numberfield</module>
         <module>vaadin-demo</module>
         <module>webcam</module>
+        <module>numberfield7</module>
     </modules>
     
 </project>

@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tm.kod</groupId>
-	<artifactId>webcam</artifactId>
+	<artifactId>numberfield7</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1</version>
-	<name>webcam - WebCam Add-on</name>
+	<name>numberfield7 - NumberField7 Add-on</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,19 +25,19 @@
     <!--     
 	<organization>
 		<name>My Name</name>
-		<url>https://github.com/mygithubaccount/NumberField/</url>
+		<url>https://github.com/mygithubaccount/NumberField7/</url>
 	</organization>
     
 	<scm>
-		<url>git://github.com/mygithubaccount/NumberField.git</url>
-		<connection>scm:git:git://github.com/mygithubaccount/NumberField.git</connection>
+		<url>git://github.com/mygithubaccount/NumberField7.git</url>
+		<connection>scm:git:git://github.com/mygithubaccount/NumberField7.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:/mygithubaccount/${ComponentClassName}.git</developerConnection>
-		<tag>NumberField add-on for Vaadin</tag>
+		<tag>NumberField7 add-on for Vaadin</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/mygithubaccount/NumberField/issues</url>
+		<url>https://github.com/mygithubaccount/NumberField7/issues</url>
 	</issueManagement>
     -->
 
@@ -129,7 +129,7 @@
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
 							<Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-							<Vaadin-Widgetsets>tm.kod.widgets.webcam.WidgetSet</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>tm.kod.widgets.numberfield.WidgetSet</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
 				</configuration>
