@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.vaadin.client.ui.VTextField;
 
 /**
@@ -64,7 +63,11 @@ public class NumberFieldWidget extends VTextField {
     /**
      * temp string
      */
-    private String tempString;
+    private String oldValue;
+    /**
+     * temp string
+     */
+    private int prevCursor;
     // key down handler
     private final KeyDownHandler keyDownHandler = new KeyDownHandler() {
         @Override
@@ -92,7 +95,11 @@ public class NumberFieldWidget extends VTextField {
                     || (nativeKeyCode == KeyCodes.KEY_CTRL)
                     || (nativeKeyCode == KeyCodes.KEY_SHIFT)
                     || (nativeKeyCode == KeyCodes.KEY_TAB);
-            tempString = getValue();
+            oldValue = getValue();      
+            if(oldValue == null) {
+                oldValue = "";
+            }
+            prevCursor = getCursorPos();
         }
     };
     // key press handler
@@ -175,8 +182,6 @@ public class NumberFieldWidget extends VTextField {
         @Override
         public void onKeyUp(KeyUpEvent event) {
             String value = getValue();
-            int curPos = getCursorPos();
-            int selection = getSelectionLength();
             int keyCode = event.getNativeKeyCode();
             if (specialKeyDown) {
                 if (value != null) {
@@ -190,11 +195,6 @@ public class NumberFieldWidget extends VTextField {
                             }
                         }
                     }
-                    value = formatString(value);
-                    if (keyCode != KeyCodes.KEY_A && keyCode != KeyCodes.KEY_CTRL) {
-                        setValue(value);
-                        resetCursorPosition(curPos, selection, value, keyCode);
-                    }
                 }
             } else {
                 if (value == null || value.isEmpty()) {
@@ -206,41 +206,38 @@ public class NumberFieldWidget extends VTextField {
                     hasSeparator = decimalLength > 0
                             && value.contains(Character
                                     .toString(decimalSeparator));
-                    value = formatString(value);
-                    if (value.isEmpty()) {
-                        event.preventDefault();
-                    } else {
+                }
+            }
+            if (value != null && !value.isEmpty()) {
+                value = formatString(value);
+                if (value.isEmpty()) {
+                    event.preventDefault();
+                } else {
+                    int olen = oldValue.length();
+                    int nlen = value.length();
+                    if (olen != nlen) {
                         setValue(value);
-                        resetCursorPosition(curPos, selection, value, keyCode);
+                        resetCursorPosition(olen, nlen);
                     }
                 }
             }
             if (!hasSeparator) {
                 currentDecimalLen = 0;
             }
-            tempString = null;
+            oldValue = null;
         }
 
-        private void resetCursorPosition(int curPos, int range, String value, int keyCode) {
-            //if ((KeyCodes.KEY_ZERO <= keyCode) && (keyCode <= KeyCodes.KEY_NINE)
-            //        || (KeyCodes.KEY_NUM_ZERO <= keyCode) && (keyCode <= KeyCodes.KEY_NUM_NINE)) {
-            if (value.length() > tempString.length()) {
-                String begin1 = tempString.substring(0, curPos);
-                String begin2 = value.substring(0, curPos);
-                if (begin2.length() > begin1.length()) {
-                    curPos++;
-                }
-                if (curPos > value.length()) {
-                    curPos = value.length();
-                }
-            } else if (value.length() < tempString.length()) {
-                curPos--;
-                if (curPos < 0) {
-                    curPos = 0;
-                }
+        private void resetCursorPosition(int olen, int nlen) {
+            int curPos = prevCursor;
+            int diff = nlen - olen;
+            curPos += diff;
+            if (curPos > nlen) {
+                curPos = nlen;
             }
-            //}
-            setSelectionRange(curPos, range);
+            if (curPos < 0) {
+                curPos = 0;
+            }
+            setCursorPos(curPos);
         }
     };
 
