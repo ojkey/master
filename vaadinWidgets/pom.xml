@@ -4,13 +4,16 @@
     <groupId>tm.kod</groupId>
     <artifactId>widgets-root</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <name>Vaadin Widgets Add-on Root Project</name>
 
     <modules>
         <module>vaadin-demo</module>
-        <module>webcam</module>
+        <module>webcamjs</module>
         <module>numberfield7</module>
     </modules>
     
+    <issueManagement>
+    	<url>https://github.com/ojkey/master/issues</url>
+    </issueManagement>
 </project>

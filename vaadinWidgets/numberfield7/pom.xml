@@ -5,7 +5,7 @@
 	<groupId>tm.kod</groupId>
 	<artifactId>numberfield7</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1</version>
+	<version>0.0.3</version>
 	<name>numberfield7 - NumberField7 Add-on</name>
 
 	<properties>
@@ -207,4 +207,7 @@
 		
 	</build>
 
+	<issueManagement>
+		<url>https://github.com/ojkey/master/issues</url>
+	</issueManagement>
 </project>

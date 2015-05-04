@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tm.kod</groupId>
-	<artifactId>webcam</artifactId>
+	<artifactId>webcamjs</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1</version>
-	<name>webcam - WebCam Add-on</name>
+	<version>0.0.3</version>
+	<name>webcamjs - WebCam Add-on</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -129,7 +129,7 @@
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
 							<Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-							<Vaadin-Widgetsets>tm.kod.widgets.webcam.WidgetSet</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>tm.kod.widgets.webcamjs.WidgetSet</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -207,4 +207,7 @@
 		
 	</build>
 
+	<issueManagement>
+		<url>https://github.com/ojkey/master/issues</url>
+	</issueManagement>
 </project>

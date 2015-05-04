@@ -5,8 +5,9 @@ import tm.kod.widgets.numberfield.client.NumberFieldState;
 import com.vaadin.ui.TextField;
 
 /**
- * This is addon modification of number field {@link vaadin.com/addon/number-field},
- * which accepts only number input and has configuration: <br/>
+ * This is addon modification of number field
+ * {@link vaadin.com/addon/number-field}, which accepts only number input and
+ * has configuration: <br/>
  * 1. Minimum value. If value != null
  * {@link StringToDoubleConverter#convertToModel(String, Class, java.util.Locale)}
  * validates value for minimum; <br/>
@@ -20,148 +21,152 @@ import com.vaadin.ui.TextField;
  * 6. Character of grouping separator. Default = ' ';<br/>
  * 7. Is signed. Default = true; <br/>
  * 8. Is use grouping. Default = false; <br/>
- * 
+ *
  * @author Kerim O.D.
- * 
+ *
  */
 public class NumberField extends TextField {
 
-	/**
-	 * Generated serial version UID
-	 */
-	private static final long serialVersionUID = 7663236836018122696L;
-	private static final String NEGATIVE_VALUE = "Negative value";
+    /**
+     * Generated serial version UID
+     */
+    private static final long serialVersionUID = 7663236836018122696L;
+    private static final String NEGATIVE_VALUE = "Negative value";
 
-	/**
-	 * Minimum value of field
-	 */
-	private Double minValue = null;
-	/**
-	 * Maximum value of field
-	 */
-	private Double maxValue = null;
-	// message strings
-	private String messageInvalidNumberValue = "Invalid number value";
-	private String messageValueIsLessThan = "Value is less than";
-	private String messageValueIsMoreThan = "Value is more than";
-	private String messageUnsignedField = "Only unsigned value";
-	
+    /**
+     * Minimum value of field
+     */
+    private Double minValue = null;
+    /**
+     * Maximum value of field
+     */
+    private Double maxValue = null;
+    // message strings
+    private String messageInvalidNumberValue = "Invalid number value";
+    private String messageValueIsLessThan = "Value is less than";
+    private String messageValueIsMoreThan = "Value is more than";
+    private String messageUnsignedField = "Only unsigned value";
 
-	public NumberField() {
-		initConverter();
-	}
+    public NumberField() {
+        initConverter();
+    }
 
-	public NumberField(String caption) {
-		super(caption);
-		initConverter();
-	}
+    public NumberField(String caption) {
+        super(caption);
+        initConverter();
+    }
 
-	private void initConverter() {
-		// setting value converter for this field
-		setConverter(new StringToDoubleConverter(this));
-	}
+    private void initConverter() {
+        // setting value converter for this field
+        setConverter(new StringToDoubleConverter(this));
+    }
 
-	@Override
-	protected NumberFieldState getState() {
-		return (NumberFieldState) super.getState();
-	}
+    @Override
+    protected NumberFieldState getState() {
+        return (NumberFieldState) super.getState();
+    }
 
-	public Double getMinValue() {
-		return minValue;
-	}
+    @Override
+    protected NumberFieldState getState(boolean markAsDirty) {
+        return (NumberFieldState) super.getState(markAsDirty);
+    }
 
-	public void setMinValue(Double minValue) {
-		this.minValue = minValue;
-	}
+    public Double getMinValue() {
+        return minValue;
+    }
 
-	public Double getMaxValue() {
-		return maxValue;
-	}
+    public void setMinValue(Double minValue) {
+        this.minValue = minValue;
+    }
 
-	public void setMaxValue(Double maxValue) {
-		this.maxValue = maxValue;
-	}
+    public Double getMaxValue() {
+        return maxValue;
+    }
 
-	public void setDecimalSeparator(char sep) {
-		getState().decimalSeparator = sep;
-	}
+    public void setMaxValue(Double maxValue) {
+        this.maxValue = maxValue;
+    }
 
-	public char getDecimalSeparator() {
-		return getState().decimalSeparator;
-	}
+    public void setDecimalSeparator(char sep) {
+        getState().decimalSeparator = sep;
+    }
 
-	public void setDecimalLength(int length) {
-		if (length < 0) {
-			throw new IllegalArgumentException(NEGATIVE_VALUE);
-		}
-		getState().decimalLength = length;
-	}
+    public char getDecimalSeparator() {
+        return getState(false).decimalSeparator;
+    }
 
-	public boolean isUseGrouping() {
-		return getState().isUseGrouping;
-	}
+    public void setDecimalLength(int length) {
+        if (length < 0) {
+            throw new IllegalArgumentException(NEGATIVE_VALUE);
+        }
+        getState().decimalLength = length;
+    }
 
-	public void setUseGrouping(boolean use) {
-		getState().isUseGrouping = use;
-	}
+    public boolean isUseGrouping() {
+        return getState(false).isUseGrouping;
+    }
 
-	public boolean isSigned() {
-		return getState().isSigned;
-	}
+    public void setUseGrouping(boolean use) {
+        getState().isUseGrouping = use;
+    }
 
-	public void setSigned(boolean signed) {
-		getState().isSigned = signed;
-	}
+    public boolean isSigned() {
+        return getState(false).isSigned;
+    }
 
-	public int getDecimalLength() {
-		return getState().decimalLength;
-	}
+    public void setSigned(boolean signed) {
+        getState().isSigned = signed;
+    }
 
-	public void setGroupingSeparator(char sep) {
-		getState().groupingSeparator = sep;
-	}
+    public int getDecimalLength() {
+        return getState(false).decimalLength;
+    }
 
-	public char getGroupingSeparator() {
-		return getState().groupingSeparator;
-	}
+    public void setGroupingSeparator(char sep) {
+        getState().groupingSeparator = sep;
+    }
 
-	public Double getDoubleValue() {
-		return (Double) getConvertedValue();
-	}
+    public char getGroupingSeparator() {
+        return getState(false).groupingSeparator;
+    }
 
-	public void setDoubleValue(Double value) {
-		setConvertedValue(value);
-	}
+    public Double getDoubleValue() {
+        return (Double) getConvertedValue();
+    }
 
-	public String getMessageInvalidNumberValue() {
-		return messageInvalidNumberValue;
-	}
+    public void setDoubleValue(Double value) {
+        setConvertedValue(value);
+    }
 
-	public void setMessageInvalidNumberValue(String message) {
-		this.messageInvalidNumberValue = message;
-	}
+    public String getMessageInvalidNumberValue() {
+        return messageInvalidNumberValue;
+    }
 
-	public String getMessageValueIsLessThan() {
-		return messageValueIsLessThan;
-	}
+    public void setMessageInvalidNumberValue(String message) {
+        this.messageInvalidNumberValue = message;
+    }
 
-	public void setMessageValueIsLessThan(String message) {
-		this.messageValueIsLessThan = message;
-	}
+    public String getMessageValueIsLessThan() {
+        return messageValueIsLessThan;
+    }
 
-	public String getMessageValueIsMoreThan() {
-		return messageValueIsMoreThan;
-	}
+    public void setMessageValueIsLessThan(String message) {
+        this.messageValueIsLessThan = message;
+    }
 
-	public void setMessageValueIsMoreThan(String message) {
-		this.messageValueIsMoreThan = message;
-	}
+    public String getMessageValueIsMoreThan() {
+        return messageValueIsMoreThan;
+    }
 
-	public String getMessageUnsignedField() {
-		return messageUnsignedField;
-	}
+    public void setMessageValueIsMoreThan(String message) {
+        this.messageValueIsMoreThan = message;
+    }
 
-	public void setMessageUnsignedField(String message) {
-		this.messageUnsignedField = message;
-	}
+    public String getMessageUnsignedField() {
+        return messageUnsignedField;
+    }
+
+    public void setMessageUnsignedField(String message) {
+        this.messageUnsignedField = message;
+    }
 }

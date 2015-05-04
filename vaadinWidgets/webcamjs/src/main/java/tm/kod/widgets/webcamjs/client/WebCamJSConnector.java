@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tm.kod.widgets.webcam.client;
+package tm.kod.widgets.webcamjs.client;
 
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
-import tm.kod.widgets.webcam.WebCamJS;
+import tm.kod.widgets.webcamjs.WebCamJS;
 
 /**
  *

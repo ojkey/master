@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tm.kod.widgets.webcam.client;
+package tm.kod.widgets.webcamjs.client;
 
 import com.vaadin.shared.AbstractComponentState;
 

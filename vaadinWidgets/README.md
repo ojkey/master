@@ -1,8 +1,8 @@
 # VaadinWidgets Add-on Projects for Vaadin 7
 
 VaadinWidgets has UI component add-ons for Vaadin 7:
-1. NumberField
-2. WebCam
+- NumberField
+- WebCam
 
 ## Online demo
 

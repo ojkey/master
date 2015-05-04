@@ -1,4 +1,4 @@
-package tm.kod.widgets.webcam.client;
+package tm.kod.widgets.webcamjs.client;
 
 import com.vaadin.shared.communication.ClientRpc;
 

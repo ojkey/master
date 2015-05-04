@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tm.kod.widgets.webcam;
+package tm.kod.widgets.webcamjs;
 
-import com.google.gwt.thirdparty.guava.common.io.BaseEncoding;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.util.ReflectTools;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import tm.kod.widgets.webcam.client.WebCamJSClientRpc;
-import tm.kod.widgets.webcam.client.WebCamJSServerRpc;
-import tm.kod.widgets.webcam.client.WebCamJSState;
+import tm.kod.widgets.webcamjs.client.WebCamJSClientRpc;
+import tm.kod.widgets.webcamjs.client.WebCamJSServerRpc;
+import tm.kod.widgets.webcamjs.client.WebCamJSState;
 
 /**
  * Simple Javascript WebCam component based on https://github.com/jhuckaby/webcamjs
@@ -37,6 +34,9 @@ import tm.kod.widgets.webcam.client.WebCamJSState;
 @JavaScript("vaadin://webcam/webcam.js")
 public class WebCamJS extends AbstractComponent {
 
+    /**
+     * Server PRC implementation
+     */
     private final WebCamJSServerRpc rpc = new WebCamJSServerRpc() {
 
         @Override
@@ -76,8 +76,8 @@ public class WebCamJS extends AbstractComponent {
         }
 
         @Override
-        public WebCam getSource() {
-            return (WebCam) super.getSource();
+        public WebCamJS getSource() {
+            return (WebCamJS) super.getSource();
         }
     }
 
@@ -107,16 +107,17 @@ public class WebCamJS extends AbstractComponent {
          * Generated serial version UID
          */
         private static final long serialVersionUID = -6630357998893872551L;
-        private final byte[] bytes;
+        private final String base64String;
 
         public CompleteEvent(Component source, String base64String) {
             super(source);
-            bytes = BaseEncoding.base64().decode(base64String);
+            this.base64String = base64String;
         }
 
-        public InputStream getStream() {
-            return new ByteArrayInputStream(bytes);
+        public String getBase64String() {
+            return base64String;
         }
+        
     }
 
     /**

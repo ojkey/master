@@ -8,8 +8,8 @@
 
     <!-- Inherit add-on widgetset -->
     <inherits name="tm.kod.widgets.numberfield.WidgetSet" />
-    <inherits name="tm.kod.widgets.webcam.WidgetSet" />
-
+    <inherits name="tm.kod.widgets.webcamjs.WidgetSet" />
+    
     <!--
      Uncomment the following to compile the widgetset for one browser only.
 

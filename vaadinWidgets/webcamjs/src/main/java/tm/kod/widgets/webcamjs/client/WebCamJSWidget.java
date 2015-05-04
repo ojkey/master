@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tm.kod.widgets.webcam.client;
+package tm.kod.widgets.webcamjs.client;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -64,13 +64,13 @@ public class WebCamJSWidget extends SimplePanel {
 
     public native void setReadyListener(ReadyListener l)/*-{
     $wnd.Webcam.on( 'load', function() {
-     l.@tm.kod.widgets.webcam.client.WebCamJSWidget.ReadyListener::ready()();
+     l.@tm.kod.widgets.webcamjs.client.WebCamJSWidget.ReadyListener::ready()();
     } );
      }-*/;
 
     public native void setErrorListener(ErrorListener l)/*-{
     $wnd.Webcam.on( 'error', function(err) {
-     l.@tm.kod.widgets.webcam.client.WebCamJSWidget.ErrorListener::error(Ljava/lang/String;)(err);
+     l.@tm.kod.widgets.webcamjs.client.WebCamJSWidget.ErrorListener::error(Ljava/lang/String;)(err);
     } );
      }-*/;
 
@@ -89,7 +89,7 @@ public class WebCamJSWidget extends SimplePanel {
     public native void snap(SnapListener l)/*-{
      $wnd.Webcam.snap(function (data_uri) {
      var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/, '');
-     l.@tm.kod.widgets.webcam.client.WebCamJSWidget.SnapListener::snap(Ljava/lang/String;)(raw_image_data);
+     l.@tm.kod.widgets.webcamjs.client.WebCamJSWidget.SnapListener::snap(Ljava/lang/String;)(raw_image_data);
      });
      }-*/;
 }
