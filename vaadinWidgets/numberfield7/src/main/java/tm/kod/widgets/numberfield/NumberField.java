@@ -3,11 +3,11 @@ package tm.kod.widgets.numberfield;
 import tm.kod.widgets.numberfield.client.NumberFieldState;
 
 import com.vaadin.ui.TextField;
+import tm.kod.widgets.numberfield.client.Util;
 
 /**
- * This is addon modification of number field
- * {@link vaadin.com/addon/number-field}, which accepts only number input and
- * has configuration: <br/>
+ * Number field class, which accepts only number input and has configuration:
+ * <br/>
  * 1. Minimum value. If value != null
  * {@link StringToDoubleConverter#convertToModel(String, Class, java.util.Locale)}
  * validates value for minimum; <br/>
@@ -32,33 +32,14 @@ public class NumberField extends TextField {
      */
     private static final long serialVersionUID = 7663236836018122696L;
     private static final String NEGATIVE_VALUE = "Negative value";
-
-    /**
-     * Minimum value of field
-     */
-    private Double minValue = null;
-    /**
-     * Maximum value of field
-     */
-    private Double maxValue = null;
     // message strings
     private String messageInvalidNumberValue = "Invalid number value";
-    private String messageValueIsLessThan = "Value is less than";
-    private String messageValueIsMoreThan = "Value is more than";
-    private String messageUnsignedField = "Only unsigned value";
 
     public NumberField() {
-        initConverter();
     }
 
     public NumberField(String caption) {
         super(caption);
-        initConverter();
-    }
-
-    private void initConverter() {
-        // setting value converter for this field
-        setConverter(new StringToDoubleConverter(this));
     }
 
     @Override
@@ -71,20 +52,12 @@ public class NumberField extends TextField {
         return (NumberFieldState) super.getState(markAsDirty);
     }
 
-    public Double getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(Double minValue) {
-        this.minValue = minValue;
-    }
-
-    public Double getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(Double maxValue) {
-        this.maxValue = maxValue;
+    @Override
+    public void setValue(String newValue) throws ReadOnlyException {
+        if (newValue != null) {
+            newValue = formatValue(newValue);
+        }
+        super.setValue(newValue);
     }
 
     public void setDecimalSeparator(char sep) {
@@ -130,14 +103,6 @@ public class NumberField extends TextField {
         return getState(false).groupingSeparator;
     }
 
-    public Double getDoubleValue() {
-        return (Double) getConvertedValue();
-    }
-
-    public void setDoubleValue(Double value) {
-        setConvertedValue(value);
-    }
-
     public String getMessageInvalidNumberValue() {
         return messageInvalidNumberValue;
     }
@@ -146,27 +111,37 @@ public class NumberField extends TextField {
         this.messageInvalidNumberValue = message;
     }
 
-    public String getMessageValueIsLessThan() {
-        return messageValueIsLessThan;
+    protected String formatValue(String str) {
+        str = str.trim();
+        String groupsep = Util.changeIfMetaChar(getGroupingSeparator());
+        str = str.replaceAll(groupsep, "");
+        if (str.isEmpty() || str.equals("-")) {
+            return str;
+        }
+        int p = str.indexOf(getDecimalSeparator());
+        String pre, suf;
+        if (p != -1) {
+            pre = str.substring(0, p);
+            suf = str.substring(p);
+            int len = getDecimalLength() + 1;
+            if (suf.length() > len) {
+                suf = suf.substring(0, len);
+            }
+        } else {
+            pre = str;
+            suf = "";
+        }
+        if (isUseGrouping()) {
+            // group numbers
+            pre = useGrouping(pre);
+            pre = pre.replaceAll(" ", groupsep);
+        }
+        // adding decimal part
+        return pre + suf;
     }
 
-    public void setMessageValueIsLessThan(String message) {
-        this.messageValueIsLessThan = message;
+    private String useGrouping(String s) {
+        return s.replaceAll("(\\d{1,3})(?=(?:\\d{3})+$)", "$1 ");
     }
-
-    public String getMessageValueIsMoreThan() {
-        return messageValueIsMoreThan;
-    }
-
-    public void setMessageValueIsMoreThan(String message) {
-        this.messageValueIsMoreThan = message;
-    }
-
-    public String getMessageUnsignedField() {
-        return messageUnsignedField;
-    }
-
-    public void setMessageUnsignedField(String message) {
-        this.messageUnsignedField = message;
-    }
+;
 }

@@ -15,11 +15,6 @@ import com.vaadin.client.ui.VTextField;
  * @author Kerim O.D.
  */
 public class NumberFieldWidget extends VTextField {
-
-    /**
-     * Meta-chars of regular expression
-     */
-    public static final String META_CHARS = "^$()<>[]{}|.*+?";
     /**
      * Negative zero
      */
@@ -65,7 +60,7 @@ public class NumberFieldWidget extends VTextField {
      */
     private String oldValue;
     /**
-     * temp string
+     * previous cursor position
      */
     private int prevCursor;
     // key down handler
@@ -95,8 +90,8 @@ public class NumberFieldWidget extends VTextField {
                     || (nativeKeyCode == KeyCodes.KEY_CTRL)
                     || (nativeKeyCode == KeyCodes.KEY_SHIFT)
                     || (nativeKeyCode == KeyCodes.KEY_TAB);
-            oldValue = getValue();      
-            if(oldValue == null) {
+            oldValue = getValue();
+            if (oldValue == null) {
                 oldValue = "";
             }
             prevCursor = getCursorPos();
@@ -196,30 +191,33 @@ public class NumberFieldWidget extends VTextField {
                         }
                     }
                 }
-            } else {
-                if (value == null || value.isEmpty()) {
-                    hasSeparator = false;
-                    hasNegativeSign = false;
-                } else {
-                    String sign = value.substring(0, 1);
-                    hasNegativeSign = NEGATIVE_STRING.equals(sign);
-                    hasSeparator = decimalLength > 0
-                            && value.contains(Character
-                                    .toString(decimalSeparator));
-                }
             }
-            if (value != null && !value.isEmpty()) {
+            if (value == null || value.isEmpty()) {
+                hasSeparator = false;
+                hasNegativeSign = false;
+            } else {
                 value = formatString(value);
                 if (value.isEmpty()) {
                     event.preventDefault();
                 } else {
-                    int olen = oldValue.length();
                     int nlen = value.length();
+                    int olen;
+                    if (oldValue == null) {
+                        olen = nlen;
+                    } else {
+                        olen = oldValue.length();
+                    }
                     if (olen != nlen) {
                         setValue(value);
                         resetCursorPosition(olen, nlen);
                     }
                 }
+                String sign = value.substring(0, 1);
+                hasNegativeSign = NEGATIVE_STRING.equals(sign);
+                hasSeparator = decimalLength > 0
+                        && value.contains(Character
+                                .toString(decimalSeparator));
+
             }
             if (!hasSeparator) {
                 currentDecimalLen = 0;
@@ -250,16 +248,21 @@ public class NumberFieldWidget extends VTextField {
     @Override
     public void setValue(String value) {
         super.setValue(value);
-        String sign = value.substring(0, 1);
-        hasNegativeSign = NEGATIVE_STRING.equals(sign);
-        hasSeparator = decimalLength > 0
-                && value.contains(String.valueOf(decimalSeparator));
-        if (!hasSeparator) {
-            currentDecimalLen = 0;
+        if (value != null) {
+            String sign = value.substring(0, 1);
+            hasNegativeSign = NEGATIVE_STRING.equals(sign);
+            int decSepIndex = value.indexOf(String.valueOf(decimalSeparator));
+            hasSeparator = decimalLength > 0 && decSepIndex != -1;
+            if (hasSeparator) {
+                String dec = value.substring(decSepIndex);
+                currentDecimalLen = dec.length();
+            } else {
+                currentDecimalLen = 0;
+            }
         } else {
-            String decsep = changeIfMetaChar(decimalSeparator);
-            String dec = value.split(decsep)[1];
-            currentDecimalLen = dec.length();
+            hasNegativeSign = false;
+            hasSeparator = false;
+            currentDecimalLen = 0;
         }
     }
 
@@ -311,7 +314,7 @@ public class NumberFieldWidget extends VTextField {
      */
     private String formatString(String str) {
         str = str.trim();
-        String groupsep = changeIfMetaChar(groupingSeparator);
+        String groupsep = Util.changeIfMetaChar(groupingSeparator);
         str = str.replaceAll(groupsep, "");
         if (str.isEmpty() || str.equals(NEGATIVE_STRING)) {
             return str;
@@ -347,20 +350,5 @@ public class NumberFieldWidget extends VTextField {
     private native String useGrouping(String s)/*-{
      return s.replace(/(\s)+/g, '').replace(/(\d{1,3})(?=(?:\d{3})+$)/g, '$1 ');
      }-*/;
-
-    /**
-     * Getting character as string, method changes value if is meta-character by
-     * pre-adding "\"
-     *
-     * @param character
-     * @return character as string
-     */
-    public static String changeIfMetaChar(char character) {
-        String string = String.valueOf(character);
-        if (META_CHARS.contains(string)) { // if contains pre-add '\'
-            return "\\" + character;
-        }
-        return string;
-    }
 
 }

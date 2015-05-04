@@ -181,6 +181,9 @@
                     <compileReport>true</compileReport>
                     <strict>true</strict>
                     <runTarget>http://localhost:8080/demo</runTarget>
+                    <style>DETAILED</style>
+                    <logLevel>INFO</logLevel>
+                    <draftCompile>true</draftCompile>
                 </configuration>
                 <executions>
                     <!-- You are free to mark this as permanently ignored in Eclipse -->

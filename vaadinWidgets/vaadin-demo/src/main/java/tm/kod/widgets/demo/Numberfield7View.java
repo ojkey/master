@@ -38,8 +38,6 @@ public class Numberfield7View extends VerticalLayout implements View {
     NumberField numberField = new NumberField("<span style=\"font-size: 2.4em;\">Demo NumberField</span>");
     TextField value = new TextField("Value");
     Label currentValue = new Label();
-    NumberField minValue = new NumberField("Min Value");
-    NumberField maxValue = new NumberField("Max Value");
     CheckBox isSigned = new CheckBox("Is signed");
     CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
     TextField groupingSeparator = new TextField("Grouping Separator");
@@ -76,23 +74,18 @@ public class Numberfield7View extends VerticalLayout implements View {
         form.setSpacing(true);
         content.addComponent(form);
         value.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        minValue.setNullRepresentation("");
-        minValue.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        maxValue.setNullRepresentation("");
-        maxValue.setWidth(100, Sizeable.Unit.PERCENTAGE);
         isSigned.setValue(Boolean.TRUE);
         isUseGrouping.setValue(Boolean.TRUE);
         groupingSeparator.setMaxLength(1);
         groupingSeparator.setValue(" ");
         groupingSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        decimalLength.setDoubleValue(0d);
+        decimalLength.setValue("0");
+        decimalLength.setMaxLength(1);
         decimalLength.setWidth(50, Sizeable.Unit.PERCENTAGE);
         decimalSeparator.setMaxLength(1);
         decimalSeparator.setValue(".");
         decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
         form.addComponent(value);
-        form.addComponent(minValue);
-        form.addComponent(maxValue);
         form.addComponent(isSigned);
         form.addComponent(isUseGrouping);
         form.addComponent(groupingSeparator);
@@ -102,8 +95,6 @@ public class Numberfield7View extends VerticalLayout implements View {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                numberField.setMinValue(minValue.getDoubleValue());
-                numberField.setMaxValue(maxValue.getDoubleValue());
                 numberField.setSigned(
                         Boolean.TRUE.equals(isSigned.getValue()));
                 numberField.setUseGrouping(
@@ -125,11 +116,11 @@ public class Numberfield7View extends VerticalLayout implements View {
             }
 
             int getInt(NumberField field) {
-                Double val = field.getDoubleValue();
+                String val = field.getValue();
                 if (val == null) {
                     return 0;
                 }
-                return val.intValue();
+                return Integer.valueOf(field.getValue());
             }
         });
         submitButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
