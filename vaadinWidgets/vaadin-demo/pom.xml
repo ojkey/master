@@ -1,38 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>tm.kod</groupId>
-	<artifactId>vaadin-demo</artifactId>
-	<packaging>war</packaging>
-	<version>0.0.3</version>
-	<name>Vaadin Add-on Demo</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>tm.kod</groupId>
+    <artifactId>vaadin-demo</artifactId>
+    <packaging>war</packaging>
+    <version>0.0.2</version>
+    <name>Vaadin Add-on Demo</name>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.4.5</vaadin.version>
-		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-	</properties>
-
-    <!--     
-	<organization>
-		<name>My Name</name>
-		<url>https://github.com/mygithubaccount/NumberField/</url>
-	</organization>
-    
-	<scm>
-		<url>git://github.com/mygithubaccount/NumberField.git</url>
-		<connection>scm:git:git://github.com/mygithubaccount/NumberField.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:/mygithubaccount/${ComponentClassName}.git</developerConnection>
-		<tag>NumberField add-on for Vaadin</tag>
-	</scm>
-
-        <issueManagement>
-                <system>GitHub</system>
-                <url>https://github.com/mygithubaccount/NumberField/issues</url>
-        </issueManagement>
-    -->
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <vaadin.version>7.4.5</vaadin.version>
+        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+    </properties>
     <licenses>
         <license>
             <name>Apache 2</name>

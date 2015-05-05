@@ -1,14 +1,17 @@
-# NumberField7 Add-on component for Vaadin 7
+# WebCamJS Add-on Project on Vaadin 7. This Add-on project based on JavaScript library project WebCamJS.
+For more information visit [https://github.com/jhuckaby/webcamjs](https://github.com/jhuckaby/webcamjs)
+
+
 
 ## Online demo
 
-Try the add-on demo at http://ojkey.jelastic.servint.net/demo/#!numberfield7
+Try the add-on demo at http://ojkey.jelastic.servint.net/demo/#!webcamjs
 
 ## Download release
 
 ## Building and running demo
 
-git clone <url of the VaadinWidgets repository>
+git clone <url of the WebCamJS repository>
 mvn clean install
 cd demo
 mvn jetty:run
@@ -47,12 +50,13 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 0.0.2
-- Code-refactoring and simplification (deleted min, max values for validation and default converter) 
-- Added NumberfFieldWidget class 
-- Deleted demo project source code from add-on project 
-- Bug fix with saving cursor position 
-- Deleted click and focus handlers 
+### Version 1.0-SNAPSHOT
+- Implemented WebCamJS in GWT and integrated with Vaadin client connector  
+- Tested on Chrome(version 42), FireFox(version 37), Internet Explorer(version 9 and 11), Opera(version 29)
+
+This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases. That said, the following features are planned for upcoming releases:
+- ...
+- ...
 
 ## Issue tracking
 
@@ -72,119 +76,101 @@ Contributions are welcome, but there are no guarantees that they are accepted as
 
 Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-NumberField7 is written by Kerim O.D.
+WebCamJS Vaadin Add-on is written by Kerim O.D.
 
 # Developer Guide
 
 ## Getting started
 
+For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/WebCamJSView.java
 ```java
-public class Numberfield7View extends VerticalLayout implements View {
+public class WebCamJSView extends VerticalLayout implements View {
 
-    NumberField numberField = new NumberField("<span style=\"font-size: 2.4em;\">Demo NumberField</span>");
-    TextField value = new TextField("Value");
-    Label currentValue = new Label();
-    CheckBox isSigned = new CheckBox("Is signed");
-    CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
-    TextField groupingSeparator = new TextField("Grouping Separator");
-    NumberField decimalLength = new NumberField("Decimalc Length");
-    TextField decimalSeparator = new TextField("Decimal Separator");
+    WebCamJS webCam = new WebCamJS("Webcam");
+    Image image = new Image("Image");
+    HorizontalLayout buttons = new HorizontalLayout();
 
-    public Numberfield7View() {
+    public WebCamJSView() {
         setSizeFull();
-        HorizontalLayout content = new HorizontalLayout();
-        content.setWidth(700, Sizeable.Unit.PIXELS);
-        content.setMargin(true);
+        VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);
+        content.setMargin(true);
+        content.setSizeUndefined();
         addComponent(content);
         setComponentAlignment(content, Alignment.MIDDLE_CENTER);
-        VerticalLayout form = new VerticalLayout();
-        form.setSpacing(true);
-        content.addComponent(form);
-        numberField.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        numberField.setCaptionAsHtml(true);
-        numberField.setNullRepresentation("");
-        numberField.setImmediate(true);
-        form.addComponent(numberField);
-        form.addComponent(new Button("Get current Value:", new Button.ClickListener() {
+        Label label = new Label("WebCamJSJS on Vaadin Demo");
+        label.addStyleName("h1");
+        content.addComponent(label);
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setSpacing(true);
+        content.addComponent(layout);
+        image.setHeight(240, Sizeable.Unit.PIXELS);
+        image.setWidth(320, Sizeable.Unit.PIXELS);
+        webCam.addReadyListener(new WebCamJS.ReadyListener() {
 
             @Override
-            public void buttonClick(Button.ClickEvent event) {
-                currentValue.setValue(numberField.getValue());
-            }
-        }));
-        form.addComponent(currentValue);
-        form = new VerticalLayout();
-        form.setCaption("<h3>Field Settings</h3>");
-        form.setCaptionAsHtml(true);
-        form.setSpacing(true);
-        content.addComponent(form);
-        value.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        isSigned.setValue(Boolean.TRUE);
-        isUseGrouping.setValue(Boolean.TRUE);
-        groupingSeparator.setMaxLength(1);
-        groupingSeparator.setValue(" ");
-        groupingSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        decimalLength.setValue("0");
-        decimalLength.setMaxLength(1);
-        decimalLength.setWidth(50, Sizeable.Unit.PERCENTAGE);
-        decimalSeparator.setMaxLength(1);
-        decimalSeparator.setValue(".");
-        decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        form.addComponent(value);
-        form.addComponent(isSigned);
-        form.addComponent(isUseGrouping);
-        form.addComponent(groupingSeparator);
-        form.addComponent(decimalLength);
-        form.addComponent(decimalSeparator);
-        Button submitButton = new Button("Reset settings", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                numberField.setSigned(
-                        Boolean.TRUE.equals(isSigned.getValue()));
-                numberField.setUseGrouping(
-                        Boolean.TRUE.equals(isUseGrouping.getValue()));
-                numberField.setGroupingSeparator(
-                        getChar(groupingSeparator, ' '));
-                numberField.setDecimalLength(getInt(decimalLength));
-                numberField.setDecimalSeparator(
-                        getChar(decimalSeparator, '.'));
-                numberField.setValue(value.getValue());
-            }
-
-            char getChar(TextField field, char defaultChar) {
-                String val = field.getValue();
-                if (val == null || val.isEmpty()) {
-                    return defaultChar;
-                }
-                return val.charAt(0);
-            }
-
-            int getInt(NumberField field) {
-                String val = field.getValue();
-                if (val == null) {
-                    return 0;
-                }
-                return Integer.valueOf(field.getValue());
+            public void ready(WebCamJS.ReadyEvent e) {
+                buttons.setVisible(true);
             }
         });
-        submitButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        form.addComponent(submitButton);
-        form.setComponentAlignment(submitButton, Alignment.BOTTOM_RIGHT);
-        submitButton.click();
+        webCam.addUploadCompleteListener(new WebCamJS.UploadCompleteListener() {
+
+            @Override
+            public void complete(final WebCamJS.CompleteEvent e) {
+                StreamResource sr = new StreamResource(new StreamResource.StreamSource() {
+
+                    @Override
+                    public InputStream getStream() {
+                        byte[] bytes = BaseEncoding.base64().decode(e.getBase64String());
+                        return new ByteArrayInputStream(bytes);
+                    }
+                }, System.currentTimeMillis() + ".jpeg");
+                image.setSource(sr);
+            }
+        });
+        layout.addComponent(webCam);
+        layout.addComponent(image);
+        // initing buttons
+        buttons.setVisible(false); // visible when webcam is ready
+        buttons.setSpacing(true);
+        content.addComponent(buttons);
+        // init freeze button
+        Button button = new Button("Freeze", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                webCam.freeze();
+            }
+        });
+        buttons.addComponent(button);
+        // initing unfreeze button
+        button = new Button("Unfreeze", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                webCam.unfreeze();
+            }
+        });
+        buttons.addComponent(button);
+        // initing snapshoot button
+        button = new Button("Upload (Snap)", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                webCam.snap();
+            }
+        });
+        button.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        buttons.addComponent(button);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Page.getCurrent().setTitle("NumberField7 Demo View");
+        Page.getCurrent().setTitle("WebCamJS Demo View");
     }
 
 }
-
 ```
-
-For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/Numberfield7View.java
 
 ## Features
 
@@ -202,4 +188,4 @@ For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/d
 
 ## API
 
-VaadinWidgets JavaDoc is available online at <...>
+WebCamJS JavaDoc is available online at <...>

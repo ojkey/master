@@ -24,18 +24,35 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class WebCamJSWidget extends SimplePanel {
 
+    /**
+     * Ready listener interface
+     */
     public interface ReadyListener {
 
         public void ready();
     }
 
+    /**
+     * Error listener interface
+     */
     public interface ErrorListener {
 
+        /**
+         * Called on error
+         * @param message 
+         */
         public void error(String message);
     }
 
+    /**
+     * Image snap listener interface
+     */
     public interface SnapListener {
 
+        /**
+         * Called on image snapped
+         * @param base64String 
+         */
         public void snap(String base64String);
     }
     

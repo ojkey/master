@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Kerim.
+ * Copyright 2015 Kerim O.D.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -193,11 +193,11 @@ public class WebCamJS extends AbstractComponent {
         }
     }
 
-    public int getImageWidth() {
+    public int getCamWidth() {
         return getState().camWidth;
     }
 
-    public void setImageWidth(int camWidth) {
+    public void setCamWidth(int camWidth) {
         getState().camWidth = camWidth;
     }
 

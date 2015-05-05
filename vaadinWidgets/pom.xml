@@ -4,7 +4,7 @@
     <groupId>tm.kod</groupId>
     <artifactId>widgets-root</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.3</version>
+    <version>0.0.2</version>
     <name>Vaadin Widgets Add-on Root Project</name>
 
     <modules>
