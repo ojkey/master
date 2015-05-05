@@ -54,6 +54,8 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 - Bug fix with saving cursor position 
 - Deleted click and focus handlers 
 
+This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases.
+
 ## Issue tracking
 
 The issues for this add-on are tracked on its github.com page. All bug reports and feature requests are appreciated. 

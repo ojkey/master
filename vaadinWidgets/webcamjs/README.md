@@ -1,5 +1,5 @@
-# WebCamJS Add-on Project on Vaadin 7. This Add-on project based on JavaScript library project WebCamJS.
-For more information visit [https://github.com/jhuckaby/webcamjs](https://github.com/jhuckaby/webcamjs)
+# WebCamJS Add-on Project on Vaadin 7. 
+This Add-on project based on JavaScript library project [WebCamJS](https://github.com/jhuckaby/webcamjs). Some information dublicated from [https://github.com/jhuckaby/webcamjs](https://github.com/jhuckaby/webcamjs)
 
 
 
@@ -50,13 +50,15 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 1.0-SNAPSHOT
+### Version 0.0.2
 - Implemented WebCamJS in GWT and integrated with Vaadin client connector  
+- Supported methods: freeze, unfreeze, snap, reset.
+- Supported listeners: 
+    1. ReadyListener - called when webcam is ready to capture.
+    2. UploadCompleteListener - called after image uploaded
 - Tested on Chrome(version 42), FireFox(version 37), Internet Explorer(version 9 and 11), Opera(version 29)
 
-This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases. That said, the following features are planned for upcoming releases:
-- ...
-- ...
+This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases.
 
 ## Issue tracking
 
@@ -82,6 +84,36 @@ WebCamJS Vaadin Add-on is written by Kerim O.D.
 
 ## Getting started
 
+###Freezing / Previewing The Image
+
+Want to provide your users with the ability to "freeze" (i.e. preview) the image before actually saving a snapshot? Just call Webcam.freeze() to freeze the current camera image. Then call Webcam.snap() to save the frozen image, or call Webcam.unfreeze() to cancel and resume the live camera feed.
+
+The idea here is to provide a photo-booth-like experience, where the user can take a snapshot, then choose to keep or discard it, before actually calling Webcam.snap() to save the image.
+
+### Snapping a Picture
+
+To snap a picture, just add WebCamJS.UploadCompleteListener and call the WebCamJS.snap(), passing in a callback function. The image data will be passed to your listener as base64 string, which you can get from WebCamJS.CompleteEvent#getBase64String(), which you can then display in your web page, or on a server. Example:
+
+```java
+    WebCamJS webCam = new WebCamJS("Webcam");
+    webCam.addUploadCompleteListener(new WebCamJS.UploadCompleteListener() {
+
+        @Override
+        public void complete(final WebCamJS.CompleteEvent e) {
+            StreamResource sr = new StreamResource(new StreamResource.StreamSource() {
+
+                @Override
+                public InputStream getStream() {
+                    byte[] bytes = BaseEncoding.base64().decode(e.getBase64String());
+                    return new ByteArrayInputStream(bytes);
+                }
+            }, System.currentTimeMillis() + ".jpeg");
+            image.setSource(sr);
+        }
+    });
+    ...
+    webCam.snap();
+```
 For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/WebCamJSView.java
 ```java
 public class WebCamJSView extends VerticalLayout implements View {
