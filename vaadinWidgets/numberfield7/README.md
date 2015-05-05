@@ -80,6 +80,19 @@ NumberField7 is written by Kerim O.D.
 
 ## Getting started
 
+### Is signed 
+
+<...>
+
+### Grouping and grouping separator 
+
+<...>
+
+### Decimal length and separator
+
+<...>
+
+### Demo Example
 ```java
 public class Numberfield7View extends VerticalLayout implements View {
 
@@ -186,21 +199,7 @@ public class Numberfield7View extends VerticalLayout implements View {
 
 ```
 
-For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/Numberfield7View.java
-
-## Features
-
-### Feature A
-
-<...>
-
-### Feature B
-
-<...>
-
-### Feature C
-
-<...>
+For a more comprehensive example, see [Numberfield7View.java](https://github.com/ojkey/master/blob/master/vaadinWidgets/vaadin-demo/src/main/java/tm/kod/widgets/demo/Numberfield7View.java)
 
 ## API
 

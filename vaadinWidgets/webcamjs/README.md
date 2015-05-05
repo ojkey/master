@@ -54,7 +54,7 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 - Implemented WebCamJS in GWT and integrated with Vaadin client connector  
 - Supported methods: freeze, unfreeze, snap, reset.
 - Supported listeners: 
-    1. ReadyListener - called when webcam is ready to capture.
+    1. ReadyListener - called when webcamjs is ready to capture.
     2. UploadCompleteListener - called after image uploaded
 - Tested on Chrome(version 42), FireFox(version 37), Internet Explorer(version 9 and 11), Opera(version 29)
 
@@ -86,7 +86,7 @@ WebCamJS Vaadin Add-on is written by Kerim O.D.
 
 ###Freezing / Previewing The Image
 
-Want to provide your users with the ability to "freeze" (i.e. preview) the image before actually saving a snapshot? Just call Webcam.freeze() to freeze the current camera image. Then call Webcam.snap() to save the frozen image, or call Webcam.unfreeze() to cancel and resume the live camera feed.
+Want to provide your users with the ability to "freeze" (i.e. preview) the image before actually saving a snapshot? Just call WebCamJS.freeze() to freeze the current camera image. Then call Webcam.snap() to save the frozen image, or call Webcam.unfreeze() to cancel and resume the live camera feed.
 
 The idea here is to provide a photo-booth-like experience, where the user can take a snapshot, then choose to keep or discard it, before actually calling Webcam.snap() to save the image.
 
@@ -114,7 +114,17 @@ To snap a picture, just add WebCamJS.UploadCompleteListener and call the WebCamJ
     ...
     webCam.snap();
 ```
-For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/WebCamJSView.java
+
+###  Reset (Shutdown)
+
+To shut down the live camera preview and reset the system, call WebCamJS.reset(). This removes any DOM elements we added, including a Flash movie if applicable, and resets everything in the library to the initial state. Example:
+
+```java
+    Webcam.reset();
+```
+
+To use the library again after resetting, you must call Webcam.attach() and pass it your DOM element.
+
 ```java
 public class WebCamJSView extends VerticalLayout implements View {
 
@@ -204,20 +214,8 @@ public class WebCamJSView extends VerticalLayout implements View {
 }
 ```
 
-## Features
-
-### Feature A
-
-<...>
-
-### Feature B
-
-<...>
-
-### Feature C
-
-<...>
-
+For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/demo/WebCamJSView.java
+[WebCamJSView.java](https://github.com/ojkey/master/blob/master/vaadinWidgets/vaadin-demo/src/main/java/tm/kod/widgets/demo/WebCamJSView.java)
 ## API
 
 WebCamJS JavaDoc is available online at <...>
