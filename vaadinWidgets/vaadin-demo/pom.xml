@@ -72,7 +72,7 @@
         <dependency>
             <groupId>tm.kod</groupId>
             <artifactId>webcamjs</artifactId>
-            <version>0.0.3</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
