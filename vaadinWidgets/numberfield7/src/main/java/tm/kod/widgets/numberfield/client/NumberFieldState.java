@@ -47,5 +47,5 @@ public class NumberFieldState extends AbstractTextFieldState {
 	/**
 	 * Length of decimal part
 	 */
-	public int decimalLength = 0;
+	public boolean isDecimal = false;
 }

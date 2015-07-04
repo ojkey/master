@@ -41,7 +41,7 @@ public class Numberfield7View extends VerticalLayout implements View {
     CheckBox isSigned = new CheckBox("Is signed");
     CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
     TextField groupingSeparator = new TextField("Grouping Separator");
-    NumberField decimalLength = new NumberField("Decimalc Length");
+    CheckBox isDecimal = new CheckBox("Is decimal");
     TextField decimalSeparator = new TextField("Decimal Separator");
 
     public Numberfield7View() {
@@ -79,9 +79,7 @@ public class Numberfield7View extends VerticalLayout implements View {
         groupingSeparator.setMaxLength(1);
         groupingSeparator.setValue(" ");
         groupingSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        decimalLength.setValue("0");
-        decimalLength.setMaxLength(1);
-        decimalLength.setWidth(50, Sizeable.Unit.PERCENTAGE);
+        isDecimal.setValue(Boolean.FALSE);
         decimalSeparator.setMaxLength(1);
         decimalSeparator.setValue(".");
         decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
@@ -89,7 +87,7 @@ public class Numberfield7View extends VerticalLayout implements View {
         form.addComponent(isSigned);
         form.addComponent(isUseGrouping);
         form.addComponent(groupingSeparator);
-        form.addComponent(decimalLength);
+        form.addComponent(isDecimal);
         form.addComponent(decimalSeparator);
         Button submitButton = new Button("Reset settings", new Button.ClickListener() {
 
@@ -101,7 +99,8 @@ public class Numberfield7View extends VerticalLayout implements View {
                         Boolean.TRUE.equals(isUseGrouping.getValue()));
                 numberField.setGroupingSeparator(
                         getChar(groupingSeparator, ' '));
-                numberField.setDecimalLength(getInt(decimalLength));
+                numberField.setDecimal(
+                        Boolean.TRUE.equals(isDecimal.getValue()));
                 numberField.setDecimalSeparator(
                         getChar(decimalSeparator, '.'));
                 numberField.setValue(value.getValue());

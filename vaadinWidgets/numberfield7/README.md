@@ -53,6 +53,7 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 - Deleted demo project source code from add-on project 
 - Bug fix with saving cursor position 
 - Deleted click and focus handlers 
+- Simplified processing algorithm (deleted build-in converter and decimal-length property, added isDecimal property ) 
 
 This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases.
 

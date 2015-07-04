@@ -1,0 +1,12 @@
+/vaadinWidgets/webcamjs/target/
+/vaadinWidgets/numberfield7/target/
+/vaadinWidgets/vaadin-demo/target/
+/vaadinWidgets/vaadin-demo/src/main/webapp/VAADIN/widgetsets/
+/vaadinWidgets/.settings/
+vaadinWidgets/numberfield7/.settings/
+/vaadinWidgets/webcamjs/.settings/
+/vaadinWidgets/vaadin-demo/.settings/
+*.project
+*.classpath
+vaadinWidgets/vaadin-demo/src/main/webapp/VAADIN/themes/demo/styles.scss.cache
+vaadinWidgets/vaadin-demo/nb-configuration.xml

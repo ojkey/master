@@ -38,7 +38,6 @@ public class NumberField extends TextField {
      * Generated serial version UID
      */
     private static final long serialVersionUID = 7663236836018122696L;
-    private static final String NEGATIVE_VALUE = "Negative value";
     // message strings
     private String messageInvalidNumberValue = "Invalid number value";
 
@@ -60,11 +59,11 @@ public class NumberField extends TextField {
     }
 
     @Override
-    public void setValue(String newValue) throws ReadOnlyException {
-        if (newValue != null) {
-            newValue = formatValue(newValue);
+    public void setValue(String value) throws ReadOnlyException {
+        if (value != null) {
+            value = formatValue(value);
         }
-        super.setValue(newValue);
+        super.setValue(value);
     }
 
     public void setDecimalSeparator(char sep) {
@@ -73,13 +72,6 @@ public class NumberField extends TextField {
 
     public char getDecimalSeparator() {
         return getState(false).decimalSeparator;
-    }
-
-    public void setDecimalLength(int length) {
-        if (length < 0) {
-            throw new IllegalArgumentException(NEGATIVE_VALUE);
-        }
-        getState().decimalLength = length;
     }
 
     public boolean isUseGrouping() {
@@ -98,8 +90,12 @@ public class NumberField extends TextField {
         getState().isSigned = signed;
     }
 
-    public int getDecimalLength() {
-        return getState(false).decimalLength;
+    public boolean isDecimal() {
+        return getState(false).isDecimal;
+    }
+
+    public void setDecimal(boolean decimal) {
+        getState().isDecimal = decimal;
     }
 
     public void setGroupingSeparator(char sep) {
@@ -122,18 +118,16 @@ public class NumberField extends TextField {
         str = str.trim();
         String groupsep = Util.changeIfMetaChar(getGroupingSeparator());
         str = str.replaceAll(groupsep, "");
+        str = removeZero(str);
         if (str.isEmpty() || str.equals("-")) {
             return str;
         }
-        int p = str.indexOf(getDecimalSeparator());
+        String decSep = String.valueOf(getDecimalSeparator());
+        int p = str.indexOf(decSep);
         String pre, suf;
         if (p != -1) {
             pre = str.substring(0, p);
             suf = str.substring(p);
-            int len = getDecimalLength() + 1;
-            if (suf.length() > len) {
-                suf = suf.substring(0, len);
-            }
         } else {
             pre = str;
             suf = "";
@@ -143,8 +137,25 @@ public class NumberField extends TextField {
             pre = useGrouping(pre);
             pre = pre.replaceAll(" ", groupsep);
         }
-        // adding decimal part
-        return pre + suf;
+        str = pre + suf;
+        if (str.startsWith(decSep)) {
+            str = "0" + str;
+        } else if (str.startsWith("-" + decSep)) {
+            str = str.replaceFirst("-" + decSep, "-0" + decSep);
+        }
+        return str;
+    }
+
+    private String removeZero(String value) {
+        if (!value.isEmpty()) {
+            if (value.startsWith("0")) {
+                return removeZero(value.substring(1));
+            }
+            if (value.startsWith("-0")) {
+                return "-" + removeZero(value.substring(2));
+            }
+        }
+        return value;
     }
 
     private String useGrouping(String s) {

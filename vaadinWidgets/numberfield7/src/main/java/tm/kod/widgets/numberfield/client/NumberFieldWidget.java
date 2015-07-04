@@ -49,8 +49,6 @@ public class NumberFieldWidget extends VTextField {
     private boolean hasNegativeSign;
     // sign that input has decimal separator
     private boolean hasSeparator;
-    // current length of decimal part
-    private int currentDecimalLen;
     /**
      * Is number has negative sign
      */
@@ -64,13 +62,13 @@ public class NumberFieldWidget extends VTextField {
      */
     private char groupingSeparator = ' ';
     /**
+     * If number is decimal
+     */
+    private boolean decimal = false;
+    /**
      * Decimal separator character
      */
     private char decimalSeparator = '.';
-    /**
-     * Length of decimal part
-     */
-    private int decimalLength = 0;
     /**
      * temp string
      */
@@ -106,7 +104,7 @@ public class NumberFieldWidget extends VTextField {
                     || (nativeKeyCode == KeyCodes.KEY_CTRL)
                     || (nativeKeyCode == KeyCodes.KEY_SHIFT)
                     || (nativeKeyCode == KeyCodes.KEY_TAB);
-            oldValue = getValue();
+            oldValue = NumberFieldWidget.super.getValue();
             if (oldValue == null) {
                 oldValue = "";
             }
@@ -118,38 +116,12 @@ public class NumberFieldWidget extends VTextField {
         @Override
         public void onKeyPress(KeyPressEvent event) {
             char charCode = event.getCharCode();
-            String value = getValue();
             int curPos = getCursorPos();
             // if pressed number key
             if (('0' <= charCode) && (charCode <= '9')) {
-                // if is integer field
-                if (decimalLength == 0) {
-                    // if first number is '0'
-                    if (NEGATIVE_ZERO.equals(value)) {
-                        // setting "-"
-                        setValue(NEGATIVE_STRING);
-                    } else if (ZERO.equals(value)) {
-                        // setting empty string
-                        setValue("");
-                    }
-                    // else if is decimal and entered "-0" or "0"
-                } else if (NEGATIVE_ZERO.equals(value) || ZERO.equals(value)) {
-                    // appending separator char
-                    value += decimalSeparator;
-                    setValue(value);
-                }
-                // entered number of decimal part
-                if (hasSeparator && !specialKeyDown) {
-                    int sepIndex = value.indexOf(String.valueOf(decimalSeparator));
-                    if (curPos > sepIndex) {
-                        if (currentDecimalLen == decimalLength) {
-                            // canceling
-                            event.preventDefault();
-                        } else {
-                            // increase decimal length
-                            currentDecimalLen++;
-                        }
-                    }
+                // Number cannot start with zero
+                if (charCode == '0' && curPos == 0) {
+                    event.preventDefault();
                 }
                 // if entered negative char
             } else if (charCode == '-') {
@@ -162,8 +134,8 @@ public class NumberFieldWidget extends VTextField {
                 }
                 // if entered decimal separator char
             } else if (charCode == decimalSeparator) {
-                // if is integer or
-                if (decimalLength == 0 || hasSeparator) {
+                // if is integer
+                if (!decimal || hasSeparator) {
                     // canceling
                     event.preventDefault();
                     return;
@@ -176,8 +148,6 @@ public class NumberFieldWidget extends VTextField {
                 if (curPos == pos) {
                     // canceling
                     event.preventDefault();
-                } else {
-                    currentDecimalLen = 0;
                 }
                 // if another key was down
             } else if (!specialKeyDown) {
@@ -191,60 +161,29 @@ public class NumberFieldWidget extends VTextField {
     private final KeyUpHandler keyUpHandler = new KeyUpHandler() {
         @Override
         public void onKeyUp(KeyUpEvent event) {
-            String value = getValue();
+            String value = NumberFieldWidget.super.getValue();
             int keyCode = event.getNativeKeyCode();
-            if (specialKeyDown) {
-                if (value != null) {
-                    if (keyCode == KeyCodes.KEY_BACKSPACE) {
-                        hasSeparator = decimalLength > 0
-                                && prevCursor > value.indexOf(Character
-                                        .toString(decimalSeparator));
-                        if (hasSeparator && currentDecimalLen > 0) {
-                            currentDecimalLen--;
-                            if (currentDecimalLen == 0) {
-                                value = value.substring(0, value.indexOf(Character
-                                        .toString(decimalSeparator)));
-                            }
-                        }
-                    }
-                }
-            }
             if (value == null || value.isEmpty()) {
                 hasSeparator = false;
                 hasNegativeSign = false;
             } else {
                 value = formatString(value);
                 if (value.isEmpty()) {
-                    event.preventDefault();
-                } else {
-                    int nlen = value.length();
-                    int olen;
-                    if (oldValue == null) {
-                        olen = nlen;
-                    } else {
-                        olen = oldValue.length();
-                    }
-                    if (olen != nlen) {
-                        setValue(value);
-                        resetCursorPosition(olen, nlen);
-                    } else if (keyCode == KeyCodes.KEY_BACKSPACE) {
-                        setValue(value);
-                    }
+                    setValue(value);
+                } else if ((!specialKeyDown && !oldValue.equals(value))
+                        || keyCode == KeyCodes.KEY_BACKSPACE) {
+                    setValue(value);
+                    resetCursorPosition(oldValue, value);
                 }
-                String sign = value.substring(0, 1);
-                hasNegativeSign = NEGATIVE_STRING.equals(sign);
-                hasSeparator = decimalLength > 0
-                        && value.contains(Character
-                                .toString(decimalSeparator));
-
+                hasNegativeSign = value.startsWith(NEGATIVE_STRING);
+                hasSeparator = value.contains(Character.toString(decimalSeparator));
             }
-            if (!hasSeparator) {
-                currentDecimalLen = 0;
-            }
-            oldValue = null;
+            oldValue = "";
         }
 
-        private void resetCursorPosition(int olen, int nlen) {
+        private void resetCursorPosition(String oldv, String newv) {
+            int olen = oldv.length();
+            int nlen = newv.length();
             int curPos = prevCursor;
             int diff = nlen - olen;
             curPos += diff;
@@ -266,23 +205,24 @@ public class NumberFieldWidget extends VTextField {
 
     @Override
     public void setValue(String value) {
-        super.setValue(value);
-        if (value != null) {
-            String sign = value.substring(0, 1);
-            hasNegativeSign = NEGATIVE_STRING.equals(sign);
-            int decSepIndex = value.indexOf(String.valueOf(decimalSeparator));
-            hasSeparator = decimalLength > 0 && decSepIndex != -1;
-            if (hasSeparator) {
-                String dec = value.substring(decSepIndex + 1);
-                currentDecimalLen = dec.length();
-            } else {
-                currentDecimalLen = 0;
-            }
-        } else {
+        if (value == null) {
             hasNegativeSign = false;
             hasSeparator = false;
-            currentDecimalLen = 0;
+        } else {
+            hasNegativeSign = value.startsWith(NEGATIVE_STRING);
+            hasSeparator = value.contains(String.valueOf(decimalSeparator));
+            value = formatString(value);
         }
+        super.setValue(value);
+    }
+
+    @Override
+    public String getValue() {
+        String value = super.getValue();
+        if (value != null) {
+            return formatString(value);
+        }
+        return null;
     }
 
     public boolean isSigned() {
@@ -309,20 +249,20 @@ public class NumberFieldWidget extends VTextField {
         this.groupingSeparator = groupingSeparator;
     }
 
+    public boolean isDecimal() {
+        return decimal;
+    }
+
+    public void setDecimal(boolean decimal) {
+        this.decimal = decimal;
+    }
+
     public char getDecimalSeparator() {
         return decimalSeparator;
     }
 
     public void setDecimalSeparator(char decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
-    }
-
-    public int getDecimalLength() {
-        return decimalLength;
-    }
-
-    public void setDecimalLength(int decimalLength) {
-        this.decimalLength = decimalLength;
     }
 
     /**
@@ -335,18 +275,16 @@ public class NumberFieldWidget extends VTextField {
         str = str.trim();
         String groupsep = Util.changeIfMetaChar(groupingSeparator);
         str = str.replaceAll(groupsep, "");
+        str = removeZero(str);
         if (str.isEmpty() || str.equals(NEGATIVE_STRING)) {
             return str;
         }
-        int p = str.indexOf(decimalSeparator);
+        String decSep = String.valueOf(decimalSeparator);
+        int p = str.indexOf(decSep);
         String pre, suf;
         if (p != -1) {
             pre = str.substring(0, p);
             suf = str.substring(p);
-            int len = decimalLength + 1;
-            if (suf.length() > len) {
-                suf = suf.substring(0, len);
-            }
         } else {
             pre = str;
             suf = "";
@@ -356,8 +294,25 @@ public class NumberFieldWidget extends VTextField {
             pre = useGrouping(pre);
             pre = pre.replaceAll(" ", groupsep);
         }
-        // adding decimal part
-        return pre + suf;
+        str = pre + suf;
+        if (str.startsWith(decSep)) {
+            str = ZERO + str;
+        } else if (str.startsWith(NEGATIVE_STRING + decSep)) {
+            str = str.replaceFirst("-" + decSep, NEGATIVE_ZERO + decSep);
+        }
+        return str;
+    }
+
+    private String removeZero(String value) {
+        if (!value.isEmpty()) {
+            if (value.startsWith(ZERO)) {
+                return removeZero(value.substring(1));
+            }
+            if (value.startsWith(NEGATIVE_ZERO)) {
+                return NEGATIVE_STRING + removeZero(value.substring(2));
+            }
+        }
+        return value;
     }
 
     /**

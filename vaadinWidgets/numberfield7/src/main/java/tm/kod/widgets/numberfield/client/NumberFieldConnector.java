@@ -52,11 +52,11 @@ public class NumberFieldConnector extends TextFieldConnector {
     public void onStateChanged(StateChangeEvent event) {
         NumberFieldWidget widget = getWidget();
         NumberFieldState state = getState();
-        widget.setDecimalLength(state.decimalLength);
-        widget.setDecimalSeparator(state.decimalSeparator);
-        widget.setGroupingSeparator(state.groupingSeparator);
         widget.setSigned(state.isSigned);
+        widget.setDecimal(state.isDecimal);
+        widget.setDecimalSeparator(state.decimalSeparator);
         widget.setUseGrouping(state.isUseGrouping);
+        widget.setGroupingSeparator(state.groupingSeparator);
         super.onStateChanged(event);
     }
 
