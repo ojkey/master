@@ -21,13 +21,13 @@ import com.vaadin.ui.TextField;
 import tm.kod.widgets.numberfield.client.Util;
 
 /**
- * Number field class, which accepts only number input and has configuration:
+ * Number input field class, which accepts only numbers and has configuration:
  * <br/>
- * 1. Character of decimal separator. Default = '.';<br/>
- * 2. Decimal length. Default = 0; <br/>
+ * 1. Is signed. Default = true; <br/>
+ * 2. Is use grouping. Default = false; <br/>
  * 3. Character of grouping separator. Default = ' ';<br/>
- * 4. Is signed. Default = true; <br/>
- * 5. Is use grouping. Default = false; <br/>
+ * 4. Character of decimal separator. Default = '.';<br/>
+ * 5. Is decimal. Default = false; <br/>
  *
  * @author Kerim O.D.
  *
@@ -38,12 +38,17 @@ public class NumberField extends TextField {
      * Generated serial version UID
      */
     private static final long serialVersionUID = 7663236836018122696L;
-    // message strings
-    private String messageInvalidNumberValue = "Invalid number value";
 
+    /**
+     * Default constructor
+     */
     public NumberField() {
     }
 
+    /**
+     * Constructor with caption
+     * @param caption 
+     */
     public NumberField(String caption) {
         super(caption);
     }
@@ -57,9 +62,10 @@ public class NumberField extends TextField {
     protected NumberFieldState getState(boolean markAsDirty) {
         return (NumberFieldState) super.getState(markAsDirty);
     }
-
+    
     @Override
     public void setValue(String value) throws ReadOnlyException {
+        // format value if is not empty 
         if (value != null) {
             value = formatValue(value);
         }
@@ -104,14 +110,6 @@ public class NumberField extends TextField {
 
     public char getGroupingSeparator() {
         return getState(false).groupingSeparator;
-    }
-
-    public String getMessageInvalidNumberValue() {
-        return messageInvalidNumberValue;
-    }
-
-    public void setMessageInvalidNumberValue(String message) {
-        this.messageInvalidNumberValue = message;
     }
 
     protected String formatValue(String str) {
