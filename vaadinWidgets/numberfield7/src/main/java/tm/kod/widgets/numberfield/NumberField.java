@@ -116,10 +116,13 @@ public class NumberField extends TextField {
         str = str.trim();
         String groupsep = Util.changeIfMetaChar(getGroupingSeparator());
         str = str.replaceAll(groupsep, "");
-        str = removeZero(str);
         if (str.isEmpty() || str.equals("-")) {
             return str;
         }
+        if(str.equals("0") || str.equals("-0")) {
+            return str;
+        }
+        str = removeZero(str);
         String decSep = String.valueOf(getDecimalSeparator());
         int p = str.indexOf(decSep);
         String pre, suf;

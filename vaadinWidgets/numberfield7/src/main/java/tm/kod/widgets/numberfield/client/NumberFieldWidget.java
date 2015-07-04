@@ -120,7 +120,7 @@ public class NumberFieldWidget extends VTextField {
             // if pressed number key
             if (('0' <= charCode) && (charCode <= '9')) {
                 // Number cannot start with zero
-                if (charCode == '0' && curPos == 0) {
+                if (charCode == '0' && curPos == 0 && !decimal) {
                     event.preventDefault();
                 }
                 // if entered negative char
@@ -171,10 +171,10 @@ public class NumberFieldWidget extends VTextField {
                 if (value.isEmpty()) {
                     setValue(value);
                 } else if ((!specialKeyDown && !oldValue.equals(value))
-                        || keyCode == KeyCodes.KEY_BACKSPACE) {
-                    setValue(value);
-                    resetCursorPosition(oldValue, value);
-                }
+                            || keyCode == KeyCodes.KEY_BACKSPACE) {
+                        setValue(value);
+                        resetCursorPosition(oldValue, value);
+                    }
                 hasNegativeSign = value.startsWith(NEGATIVE_STRING);
                 hasSeparator = value.contains(Character.toString(decimalSeparator));
             }
@@ -275,10 +275,14 @@ public class NumberFieldWidget extends VTextField {
         str = str.trim();
         String groupsep = Util.changeIfMetaChar(groupingSeparator);
         str = str.replaceAll(groupsep, "");
-        str = removeZero(str);
-        if (str.isEmpty() || str.equals(NEGATIVE_STRING)) {
+        if (str.isEmpty() 
+                || str.equals(NEGATIVE_STRING)) {
             return str;
         }
+        if(str.equals(ZERO) || str.equals(NEGATIVE_ZERO)) {
+            return str;
+        }
+        str = removeZero(str);
         String decSep = String.valueOf(decimalSeparator);
         int p = str.indexOf(decSep);
         String pre, suf;
