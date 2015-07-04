@@ -10,3 +10,6 @@ vaadinWidgets/numberfield7/.settings/
 *.classpath
 vaadinWidgets/vaadin-demo/src/main/webapp/VAADIN/themes/demo/styles.scss.cache
 vaadinWidgets/vaadin-demo/nb-configuration.xml
+vaadinWidgets/nb-configuration.xml
+vaadinWidgets/numberfield7/nb-configuration.xml
+vaadinWidgets/webcamjs/nb-configuration.xml

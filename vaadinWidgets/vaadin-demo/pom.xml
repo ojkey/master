@@ -161,9 +161,10 @@
                     <compileReport>true</compileReport>
                     <strict>true</strict>
                     <runTarget>http://localhost:8080/demo</runTarget>
-                    <style>DETAILED</style>
+                    <style>OBF</style>
                     <logLevel>INFO</logLevel>
                     <draftCompile>true</draftCompile>
+                    <optimizationLevel>9</optimizationLevel>
                 </configuration>
                 <executions>
                     <!-- You are free to mark this as permanently ignored in Eclipse -->
