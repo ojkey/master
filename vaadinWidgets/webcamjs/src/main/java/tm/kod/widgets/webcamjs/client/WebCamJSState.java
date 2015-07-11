@@ -39,9 +39,5 @@ public class WebCamJSState extends AbstractComponentState {
      * WebCam height. Default value = 240
      */
     public int camHeight = 240;
-    /**
-     * Location of SWF movie
-     */
-    public String swfUrl;
     
 }

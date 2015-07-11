@@ -27,9 +27,11 @@ import tm.kod.widgets.webcamjs.client.WebCamJSServerRpc;
 import tm.kod.widgets.webcamjs.client.WebCamJSState;
 
 /**
- * Simple Javascript WebCam component based on https://github.com/jhuckaby/webcamjs
+ * Simple Javascript WebCam component based on
+ * https://github.com/jhuckaby/webcamjs WARNING: To correct working you have to
+ * use only one instance in UI.
  *
- * @author Kerim
+ * @author Kerim O.D.
  */
 @JavaScript("vaadin://webcam/webcam.js")
 public class WebCamJS extends AbstractComponent {
@@ -51,7 +53,7 @@ public class WebCamJS extends AbstractComponent {
 
         @Override
         public void upload(String base64String) {
-            fireEvent(new CompleteEvent(WebCamJS.this, base64String));
+            fireEvent(new ReceivedEvent(WebCamJS.this, base64String));
         }
 
     };
@@ -61,7 +63,7 @@ public class WebCamJS extends AbstractComponent {
     private static final long serialVersionUID = -3703246954643612374L;
 
     /**
-     * Upload complete event class
+     * WebCamJS component is ready to capture event class
      *
      */
     public class ReadyEvent extends Event {
@@ -82,7 +84,7 @@ public class WebCamJS extends AbstractComponent {
     }
 
     /**
-     * Webcam ready listener
+     * WebCamJS component is ready listener
      *
      */
     public interface ReadyListener extends Serializable {
@@ -98,10 +100,10 @@ public class WebCamJS extends AbstractComponent {
     }
 
     /**
-     * Upload complete event class
+     * Snap data received event
      *
      */
-    public class CompleteEvent extends Event {
+    public class ReceivedEvent extends Event {
 
         /**
          * Generated serial version UID
@@ -109,7 +111,7 @@ public class WebCamJS extends AbstractComponent {
         private static final long serialVersionUID = -6630357998893872551L;
         private final String base64String;
 
-        public CompleteEvent(Component source, String base64String) {
+        public ReceivedEvent(Component source, String base64String) {
             super(source);
             this.base64String = base64String;
         }
@@ -117,23 +119,22 @@ public class WebCamJS extends AbstractComponent {
         public String getBase64String() {
             return base64String;
         }
-        
+
     }
 
     /**
-     * Upload complete listener
+     * Snap data received listener
      *
      */
-    public interface UploadCompleteListener extends Serializable {
+    public interface SnapReceivedListener extends Serializable {
 
-        static Method METHOD = ReflectTools.findMethod(
-                UploadCompleteListener.class, "complete", CompleteEvent.class);
+        static Method METHOD = ReflectTools.findMethod(SnapReceivedListener.class, "received", ReceivedEvent.class);
 
         /**
          *
          * @param e event object
          */
-        void complete(CompleteEvent e);
+        void received(ReceivedEvent e);
     }
 
     public WebCamJS() {
@@ -157,54 +158,76 @@ public class WebCamJS extends AbstractComponent {
         super.removeListener(ReadyEvent.class, listener, ReadyListener.METHOD);
     }
 
-    public void addUploadCompleteListener(UploadCompleteListener listener) {
-        super.addListener(CompleteEvent.class, listener,
-                UploadCompleteListener.METHOD);
+    public void addSnapReceivedListener(SnapReceivedListener listener) {
+        super.addListener(ReceivedEvent.class, listener,
+                SnapReceivedListener.METHOD);
     }
 
-    public void removeUploadCompleteListener(UploadCompleteListener listener) {
-        super.removeListener(CompleteEvent.class, listener,
-                UploadCompleteListener.METHOD);
+    public void removeSnapReceivedListener(SnapReceivedListener listener) {
+        super.removeListener(ReceivedEvent.class, listener,
+                SnapReceivedListener.METHOD);
     }
 
+    /**
+     * Freeze the current live camera frame, allowing the user to preview before
+     * saving.
+     */
     public void freeze() {
         getRpcProxy(WebCamJSClientRpc.class).freeze();
     }
 
+    /**
+     * Cancel the preview (discard image) and resume the live camera view.
+     */
     public void unfreeze() {
         getRpcProxy(WebCamJSClientRpc.class).unfreeze();
     }
 
-    public void reset() {
-        getRpcProxy(WebCamJSClientRpc.class).reset();
-    }
-
+    /**
+     * Take a snapshot from the camera (or frozen preview image). Pass callback
+     * function to receive data.
+     */
     public void snap() {
         getRpcProxy(WebCamJSClientRpc.class).snap();
     }
 
     public int getQuality() {
-        return getState().quality;
+        return getState(false).quality;
     }
 
     public void setQuality(int quality) {
-        if (quality > 0 && quality <= 100) {
+        if (quality >= 0 && quality <= 100) {
             getState().quality = quality;
         }
     }
 
     public int getCamWidth() {
-        return getState().camWidth;
+        return getState(false).camWidth;
     }
 
+    /**
+     * WebCam width in pixels. Default value = 320
+     *
+     * @param camWidth
+     */
     public void setCamWidth(int camWidth) {
         getState().camWidth = camWidth;
     }
 
+    /**
+     *
+     * @return camera's height
+     */
     public int getCamHeight() {
-        return getState().camHeight;
+        return getState(false).camHeight;
     }
 
+    /**
+     *
+     * WebCam height in pixel. Default value = 240
+     *
+     * @param camHeight
+     */
     public void setCamHeight(int camHeight) {
         getState().camHeight = camHeight;
     }
@@ -212,5 +235,10 @@ public class WebCamJS extends AbstractComponent {
     @Override
     protected WebCamJSState getState() {
         return (WebCamJSState) super.getState();
+    }
+
+    @Override
+    protected WebCamJSState getState(boolean markAsDirty) {
+        return (WebCamJSState) super.getState(markAsDirty);
     }
 }

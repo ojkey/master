@@ -25,7 +25,5 @@ public interface WebCamJSClientRpc extends ClientRpc {
 
     public void unfreeze();
 
-    public void reset();
-
     public void snap();
 }

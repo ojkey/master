@@ -32,6 +32,9 @@ public class WebCamJSConnector extends AbstractComponentConnector
 
     WebCamJSServerRpc rpc;
     boolean inited;
+    int quality = 90;
+    int camWidth = 320;
+    int camHeight = 240;
 
     public WebCamJSConnector() {
         rpc = getRpcProxy(WebCamJSServerRpc.class);
@@ -49,34 +52,11 @@ public class WebCamJSConnector extends AbstractComponentConnector
             }
 
             @Override
-            public void reset() {
-                getWidget().reset();
-                initWebCamWidget();
-            }
-
-            @Override
             public void snap() {
                 getWidget().snap(WebCamJSConnector.this);
             }
 
         });
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        initWebCamWidget();
-    }
-    
-    
-    protected void initWebCamWidget() {
-        WebCamJSState state = getState();
-        WebCamJSWidget widget = getWidget();       
-        widget.setCamWidth(state.camWidth);      
-        widget.setCamHeight(state.camHeight);
-        widget.setReadyListener(this);
-        widget.setErrorListener(this);
-        widget.init();
     }
 
     @Override
@@ -106,7 +86,46 @@ public class WebCamJSConnector extends AbstractComponentConnector
 
     @Override
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
-        getWidget().setQuality(getState().quality);
+        WebCamJSState state = getState();
+            WebCamJSWidget widget = getWidget();
+        boolean camStateChanged = false;
+        if(camWidth != state.camWidth) {
+            camWidth = state.camWidth;
+            widget.setQuality(camWidth);
+            camStateChanged = true;
+        }
+        if(camHeight != state.camHeight) {
+            camHeight = state.camHeight;
+            widget.setQuality(camHeight);
+            camStateChanged = true;
+        }
+        if(quality != state.quality) {
+            quality = state.quality;
+            widget.setQuality(quality);
+            camStateChanged = true;
+        }
+        if (camStateChanged) {
+            widget.reset();
+            widget.init();
+        }
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        WebCamJSState state = getState();
+        WebCamJSWidget widget = getWidget();
+        widget.setCamWidth(state.camWidth);
+        widget.setCamHeight(state.camHeight);
+        widget.setReadyListener(WebCamJSConnector.this);
+        widget.setErrorListener(WebCamJSConnector.this);
+        widget.init();
+    }
+
+    @Override
+    public void onUnregister() {
+        getWidget().reset();
+        super.onUnregister();
     }
 
 }
