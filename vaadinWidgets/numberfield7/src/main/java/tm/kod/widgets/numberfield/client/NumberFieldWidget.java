@@ -171,10 +171,10 @@ public class NumberFieldWidget extends VTextField {
                 if (value.isEmpty()) {
                     setValue(value);
                 } else if ((!specialKeyDown && !oldValue.equals(value))
-                            || keyCode == KeyCodes.KEY_BACKSPACE) {
-                        setValue(value);
-                        resetCursorPosition(oldValue, value);
-                    }
+                        || keyCode == KeyCodes.KEY_BACKSPACE) {
+                    setValue(value);
+                    resetCursorPosition(oldValue, value);
+                }
                 hasNegativeSign = value.startsWith(NEGATIVE_STRING);
                 hasSeparator = value.contains(Character.toString(decimalSeparator));
             }
@@ -187,12 +187,11 @@ public class NumberFieldWidget extends VTextField {
             int curPos = prevCursor;
             int diff = nlen - olen;
             curPos += diff;
-            if (curPos > nlen) {
+            consoleLog("1. oLen " + olen + " , nLen " + nlen + ", prev " + prevCursor);
+            if (curPos < 0 || curPos > nlen) {
                 curPos = nlen;
             }
-            if (curPos < 0) {
-                curPos = 0;
-            }
+            consoleLog("2. diff " + diff + " curPos " + curPos);
             setCursorPos(curPos);
         }
     };
@@ -275,11 +274,11 @@ public class NumberFieldWidget extends VTextField {
         str = str.trim();
         String groupsep = Util.changeIfMetaChar(groupingSeparator);
         str = str.replaceAll(groupsep, "");
-        if (str.isEmpty() 
+        if (str.isEmpty()
                 || str.equals(NEGATIVE_STRING)) {
             return str;
         }
-        if(str.equals(ZERO) || str.equals(NEGATIVE_ZERO)) {
+        if (str.equals(ZERO) || str.equals(NEGATIVE_ZERO)) {
             return str;
         }
         str = removeZero(str);
@@ -329,4 +328,7 @@ public class NumberFieldWidget extends VTextField {
      return s.replace(/(\s)+/g, '').replace(/(\d{1,3})(?=(?:\d{3})+$)/g, '$1 ');
      }-*/;
 
+    native void consoleLog(String message) /*-{
+     console.log( "me:" + message );
+     }-*/;
 }
