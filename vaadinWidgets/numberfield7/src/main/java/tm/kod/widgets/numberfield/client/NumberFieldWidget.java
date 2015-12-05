@@ -187,7 +187,14 @@ public class NumberFieldWidget extends VTextField {
             int curPos = prevCursor;
             int diff = nlen - olen;
             curPos += diff;
-            consoleLog("1. oLen " + olen + " , nLen " + nlen + ", prev " + prevCursor);
+            int oGroup = getGroup(olen);
+            int nGroup = getGroup(nlen);
+            consoleLog("1. oLen " + olen + " , nLen " + nlen + ", prev " + prevCursor + ", og = " + oGroup + ", ng = " + nGroup);
+            if(diff < -2) {
+                if(oGroup != nGroup) {
+                    
+                }
+            }
             if (curPos < 0 || curPos > nlen) {
                 curPos = nlen;
             }
@@ -222,6 +229,16 @@ public class NumberFieldWidget extends VTextField {
             return formatString(value);
         }
         return null;
+    }
+    
+    private int getGroup(int len) {
+        if(len%2==0) {
+            return 2;
+        }
+        if((len - 1)%4==0) {
+            return 1;
+        }
+        return 3;
     }
 
     public boolean isSigned() {

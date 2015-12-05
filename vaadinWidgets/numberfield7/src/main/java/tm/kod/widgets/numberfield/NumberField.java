@@ -22,12 +22,17 @@ import tm.kod.widgets.numberfield.client.Util;
 
 /**
  * Number input field class, which accepts only numbers and has configuration:
- * <br/>
- * 1. Is signed. Default = true; <br/>
- * 2. Is use grouping. Default = false; <br/>
- * 3. Character of grouping separator. Default = ' ';<br/>
- * 4. Character of decimal separator. Default = '.';<br/>
- * 5. Is decimal. Default = false; <br/>
+ * <p>
+ * 1. Is signed. Default = true;
+ * <p>
+ * 2. Is use grouping. Default = false;
+ * <p>
+ * 3. Character of grouping separator. Default = ' ';
+ * <p>
+ * 4. Character of decimal separator. Default = '.';
+ * <p>
+ * 5. Is decimal. Default = false;
+ * <p>
  *
  * @author Kerim O.D.
  *
@@ -47,7 +52,8 @@ public class NumberField extends TextField {
 
     /**
      * Constructor with caption
-     * @param caption 
+     *
+     * @param caption
      */
     public NumberField(String caption) {
         super(caption);
@@ -62,7 +68,7 @@ public class NumberField extends TextField {
     protected NumberFieldState getState(boolean markAsDirty) {
         return (NumberFieldState) super.getState(markAsDirty);
     }
-    
+
     @Override
     public void setValue(String value) throws ReadOnlyException {
         // format value if is not empty 
@@ -119,7 +125,7 @@ public class NumberField extends TextField {
         if (str.isEmpty() || str.equals("-")) {
             return str;
         }
-        if(str.equals("0") || str.equals("-0")) {
+        if (str.equals("0") || str.equals("-0")) {
             return str;
         }
         str = removeZero(str);
