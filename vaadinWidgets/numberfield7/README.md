@@ -61,6 +61,11 @@ This is modification of previous add-on https://vaadin.com/directory#!addon/numb
 - Decimal-length property.
 - Added isDecimal property.
 
+### Version 0.0.3
+
+- Bug fixed ["Cursor misposition"](https://github.com/ojkey/master/issues/2)
+
+
 This component is developed as a hobby with no public roadmap or any guarantees of upcoming releases.
 
 ## Issue tracking

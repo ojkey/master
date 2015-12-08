@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>tm.kod</groupId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tm.kod</groupId>
+        <artifactId>widgets-root</artifactId>
+        <version>0.0.3</version>
+    </parent>
     <artifactId>vaadin-demo</artifactId>
     <packaging>war</packaging>
-    <version>0.0.2</version>
     <name>Vaadin Add-on Demo</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.4.5</vaadin.version>
-        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-    </properties>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -78,18 +74,22 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client-compiler</artifactId>
             <scope>provided</scope>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-server</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

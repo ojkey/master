@@ -51,9 +51,12 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 1.0-SNAPSHOT
-- ...
-- ...
+### Version 0.0.2
+- Implemented number input field on Vaadin 7
+- Implemented WebCamJS on Vaadin 7
+
+### Version 0.0.3
+- Bug-fixing in NumberField
 
 ## Roadmap
 
@@ -91,15 +94,11 @@ For a more comprehensive example, see vaadin-demo/src/main/java/tm/kod/widgets/d
 
 ### Feature A
 
-<...>
+Number input field
 
 ### Feature B
 
-<...>
-
-### Feature C
-
-<...>
+WebCamJS on Vaadin implementation
 
 ## API
 
