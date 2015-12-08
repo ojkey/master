@@ -77,6 +77,10 @@ public class NumberFieldWidget extends VTextField {
      * previous cursor position
      */
     private int prevCursor;
+    /**
+     * selection length
+     */
+    private int selectionLength;
     // key down handler
     private final KeyDownHandler keyDownHandler = new KeyDownHandler() {
         @Override
@@ -109,6 +113,7 @@ public class NumberFieldWidget extends VTextField {
                 oldValue = "";
             }
             prevCursor = getCursorPos();
+            selectionLength = getSelectionLength();
         }
     };
     // key press handler
@@ -162,37 +167,30 @@ public class NumberFieldWidget extends VTextField {
         @Override
         public void onKeyUp(KeyUpEvent event) {
             String value = NumberFieldWidget.super.getValue();
-            int keyCode = event.getNativeKeyCode();
             if (value == null || value.isEmpty()) {
                 hasSeparator = false;
                 hasNegativeSign = false;
             } else {
-                value = formatString(value);
-                if (value.isEmpty()) {
+                String formated = formatString(value);
+                if (formated.isEmpty()) {
+                    setValue("");
+                } else if (!oldValue.equals(formated)) {
+                    int pos = getNewCursorPosition(formated);
                     setValue(value);
-                } else if ((!specialKeyDown && !oldValue.equals(value))
-                        || keyCode == KeyCodes.KEY_BACKSPACE) {
-                    setValue(value);
-                    resetCursorPosition(oldValue, value);
+                    setCursorPos(pos);
                 }
                 hasNegativeSign = value.startsWith(NEGATIVE_STRING);
                 hasSeparator = value.contains(Character.toString(decimalSeparator));
             }
-            oldValue = "";
         }
 
-        private void resetCursorPosition(String oldv, String newv) {
-            int olen = oldv.length();
-            int nlen = newv.length();
-            int curPos = prevCursor;
-            int diff = nlen - olen;
-            curPos += diff;
-            consoleLog("1. oLen " + olen + " , nLen " + nlen + ", prev " + prevCursor);
+        private int getNewCursorPosition(String newValue) {
+            int nlen = newValue.length();
+            int curPos = prevCursor + selectionLength + nlen - oldValue.length();
             if (curPos < 0 || curPos > nlen) {
                 curPos = nlen;
             }
-            consoleLog("2. diff " + diff + " curPos " + curPos);
-            setCursorPos(curPos);
+            return curPos;
         }
     };
 
@@ -326,9 +324,5 @@ public class NumberFieldWidget extends VTextField {
      */
     private native String useGrouping(String s)/*-{
      return s.replace(/(\s)+/g, '').replace(/(\d{1,3})(?=(?:\d{3})+$)/g, '$1 ');
-     }-*/;
-
-    native void consoleLog(String message) /*-{
-     console.log( "me:" + message );
      }-*/;
 }
