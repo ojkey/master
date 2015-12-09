@@ -175,6 +175,9 @@ public class NumberFieldWidget extends VTextField {
                 if (formated.isEmpty()) {
                     setValue("");
                 } else if (!oldValue.equals(formated)) {
+                    if(event.getNativeKeyCode() == KeyCodes.KEY_DELETE && selectionLength == 0) {
+                        prevCursor++;
+                    }
                     int pos = getNewCursorPosition(formated);
                     setValue(value);
                     setCursorPos(pos);
@@ -186,7 +189,8 @@ public class NumberFieldWidget extends VTextField {
 
         private int getNewCursorPosition(String newValue) {
             int nlen = newValue.length();
-            int curPos = prevCursor + selectionLength + nlen - oldValue.length();
+            int olen = oldValue.length();
+            int curPos = prevCursor + selectionLength + nlen - olen;
             if (curPos < 0 || curPos > nlen) {
                 curPos = nlen;
             }
