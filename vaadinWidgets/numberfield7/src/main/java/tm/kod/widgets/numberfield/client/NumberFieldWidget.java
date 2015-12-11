@@ -124,10 +124,6 @@ public class NumberFieldWidget extends VTextField {
             int curPos = getCursorPos();
             // if pressed number key
             if (('0' <= charCode) && (charCode <= '9')) {
-                // Number cannot start with zero
-                if (charCode == '0' && curPos == 0 && !decimal) {
-                    event.preventDefault();
-                }
                 // if entered negative char
             } else if (charCode == '-') {
                 // if not signed
