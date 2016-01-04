@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>tm.kod</groupId>
     <artifactId>numberfield7</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
     <name>numberfield7 - NumberField7 Add-on</name>
 
