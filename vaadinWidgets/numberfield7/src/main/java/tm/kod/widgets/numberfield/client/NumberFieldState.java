@@ -45,7 +45,11 @@ public class NumberFieldState extends AbstractTextFieldState {
 	 */
 	public char decimalSeparator = '.';
 	/**
+	 * Decimal similar separators
+	 */
+	public String decimalSimilarSeparators = ".";
+	/**
 	 * Length of decimal part
 	 */
-	public boolean isDecimal = false;
+	public int decimalLength = 0;
 }

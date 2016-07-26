@@ -102,14 +102,22 @@ public class NumberField extends TextField {
         getState().isSigned = signed;
     }
 
-    public boolean isDecimal() {
-        return getState(false).isDecimal;
+    public int getDecimalLength() {
+        return getState(false).decimalLength;
     }
 
-    public void setDecimal(boolean decimal) {
-        getState().isDecimal = decimal;
+    public void setDecimalLength(int decimalLength) {
+        getState().decimalLength = decimalLength;
     }
 
+    public String getDecimalSimilarSeparators() {
+        return getState(false).decimalSimilarSeparators;
+    }
+
+    public void setDecimalSimilarSeparators(String decimalSimilarSeparators) {
+        getState().decimalSimilarSeparators = decimalSimilarSeparators;
+    }
+    
     public void setGroupingSeparator(char sep) {
         getState().groupingSeparator = sep;
     }

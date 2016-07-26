@@ -53,8 +53,9 @@ public class NumberFieldConnector extends TextFieldConnector {
         NumberFieldWidget widget = getWidget();
         NumberFieldState state = getState();
         widget.setSigned(state.isSigned);
-        widget.setDecimal(state.isDecimal);
+        widget.setDecimalLength(state.decimalLength);
         widget.setDecimalSeparator(state.decimalSeparator);
+        widget.setDecimalSimilarSeparators(state.decimalSimilarSeparators);
         widget.setUseGrouping(state.isUseGrouping);
         widget.setGroupingSeparator(state.groupingSeparator);
         super.onStateChanged(event);

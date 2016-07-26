@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>tm.kod</groupId>
     <artifactId>numberfield7</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <packaging>jar</packaging>
     <name>numberfield7 - NumberField7 Add-on</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.5.10</vaadin.version>
+        <vaadin.version>7.6.8</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         <!-- ZIP Manifest fields -->
         <Implementation-Version>${project.version}</Implementation-Version>

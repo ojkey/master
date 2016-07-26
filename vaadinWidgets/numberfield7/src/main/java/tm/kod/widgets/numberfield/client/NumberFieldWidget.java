@@ -62,13 +62,21 @@ public class NumberFieldWidget extends VTextField {
      */
     private char groupingSeparator = ' ';
     /**
-     * If number is decimal
+     * Length of decimal part
      */
-    private boolean decimal = false;
+    private int decimalLength = 0;
+    /**
+     * Decimal counter
+     */
+    private int decimalCounter = 0;
     /**
      * Decimal separator character
      */
     private char decimalSeparator = '.';
+    /**
+     * Decimal similar separators
+     */
+    private String decimalSimilarSeparators = ".";
     /**
      * temp string
      */
@@ -125,6 +133,14 @@ public class NumberFieldWidget extends VTextField {
             // if pressed number key
             if (('0' <= charCode) && (charCode <= '9')) {
                 // if entered negative char
+                if (hasSeparator) {
+                    int index = oldValue.indexOf(getDecimalSeparator());
+                    if (decimalCounter == getDecimalLength() && curPos > index) {
+                        event.preventDefault();
+                        return;
+                    }
+                    decimalCounter++;
+                }
             } else if (charCode == '-') {
                 // if not signed
                 // or cursor is not in first position
@@ -136,7 +152,7 @@ public class NumberFieldWidget extends VTextField {
                 // if entered decimal separator char
             } else if (charCode == decimalSeparator) {
                 // if is integer
-                if (!decimal || hasSeparator) {
+                if (decimalLength == 0 || hasSeparator) {
                     // canceling
                     event.preventDefault();
                     return;
@@ -150,6 +166,25 @@ public class NumberFieldWidget extends VTextField {
                     // canceling
                     event.preventDefault();
                 }
+                // if another key was down
+            } else if (decimalSimilarSeparators.contains("" + charCode)) {
+                // if is integer
+                if (decimalLength == 0 || hasSeparator) {
+                    // canceling
+                    event.preventDefault();
+                    return;
+                }
+                int pos = 0;
+                if (hasNegativeSign) {
+                    pos = 1;
+                }
+                // if cursor on the first position or after '-'
+                if (curPos == pos) {
+                    // canceling
+                    event.preventDefault();
+                }
+                setValue(getValue() + decimalSeparator);
+                event.preventDefault();
                 // if another key was down
             } else if (!specialKeyDown) {
                 // canceling
@@ -166,12 +201,13 @@ public class NumberFieldWidget extends VTextField {
             if (value == null || value.isEmpty()) {
                 hasSeparator = false;
                 hasNegativeSign = false;
+                decimalCounter = 0;
             } else {
                 String formated = formatString(value);
                 if (formated.isEmpty()) {
                     setValue("");
                 } else if (!oldValue.equals(formated)) {
-                    if(event.getNativeKeyCode() == KeyCodes.KEY_DELETE && selectionLength == 0) {
+                    if (event.getNativeKeyCode() == KeyCodes.KEY_DELETE && selectionLength == 0) {
                         prevCursor++;
                     }
                     int pos = getNewCursorPosition(formated);
@@ -205,6 +241,7 @@ public class NumberFieldWidget extends VTextField {
         if (value == null) {
             hasNegativeSign = false;
             hasSeparator = false;
+            decimalCounter = 0;
         } else {
             hasNegativeSign = value.startsWith(NEGATIVE_STRING);
             hasSeparator = value.contains(String.valueOf(decimalSeparator));
@@ -246,12 +283,12 @@ public class NumberFieldWidget extends VTextField {
         this.groupingSeparator = groupingSeparator;
     }
 
-    public boolean isDecimal() {
-        return decimal;
+    public int getDecimalLength() {
+        return decimalLength;
     }
 
-    public void setDecimal(boolean decimal) {
-        this.decimal = decimal;
+    public void setDecimalLength(int decimalLength) {
+        this.decimalLength = decimalLength;
     }
 
     public char getDecimalSeparator() {
@@ -260,6 +297,14 @@ public class NumberFieldWidget extends VTextField {
 
     public void setDecimalSeparator(char decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
+    }
+
+    public String getDecimalSimilarSeparators() {
+        return decimalSimilarSeparators;
+    }
+
+    public void setDecimalSimilarSeparators(String decimalSimilarSeparators) {
+        this.decimalSimilarSeparators = decimalSimilarSeparators;
     }
 
     /**
@@ -286,6 +331,7 @@ public class NumberFieldWidget extends VTextField {
         if (p != -1) {
             pre = str.substring(0, p);
             suf = str.substring(p);
+            decimalCounter = suf.length() - 1;
         } else {
             pre = str;
             suf = "";

@@ -15,6 +15,7 @@
  */
 package tm.kod.widgets.demo;
 
+import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -41,8 +42,9 @@ public class Numberfield7View extends VerticalLayout implements View {
     CheckBox isSigned = new CheckBox("Is signed");
     CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
     TextField groupingSeparator = new TextField("Grouping Separator");
-    CheckBox isDecimal = new CheckBox("Is decimal");
+    NumberField decimalLength = new NumberField("Decimal length");
     TextField decimalSeparator = new TextField("Decimal Separator");
+    TextField decimalSimilarSeparators = new TextField("Decimal Similar Separators");    
 
     public Numberfield7View() {
         setSizeFull();
@@ -79,16 +81,20 @@ public class Numberfield7View extends VerticalLayout implements View {
         groupingSeparator.setMaxLength(1);
         groupingSeparator.setValue(" ");
         groupingSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        isDecimal.setValue(Boolean.FALSE);
+        decimalLength.setConverter(new StringToIntegerConverter());
+        decimalLength.setConvertedValue(0);
         decimalSeparator.setMaxLength(1);
         decimalSeparator.setValue(".");
-        decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
+        decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);        
+        decimalSimilarSeparators.setValue(".,");
+        decimalSimilarSeparators.setWidth(100, Sizeable.Unit.PERCENTAGE);
         form.addComponent(value);
         form.addComponent(isSigned);
         form.addComponent(isUseGrouping);
         form.addComponent(groupingSeparator);
-        form.addComponent(isDecimal);
+        form.addComponent(decimalLength);
         form.addComponent(decimalSeparator);
+        form.addComponent(decimalSimilarSeparators);
         Button submitButton = new Button("Reset settings", new Button.ClickListener() {
 
             @Override
@@ -99,10 +105,10 @@ public class Numberfield7View extends VerticalLayout implements View {
                         Boolean.TRUE.equals(isUseGrouping.getValue()));
                 numberField.setGroupingSeparator(
                         getChar(groupingSeparator, ' '));
-                numberField.setDecimal(
-                        Boolean.TRUE.equals(isDecimal.getValue()));
+                numberField.setDecimalLength((Integer)decimalLength.getConvertedValue());
                 numberField.setDecimalSeparator(
                         getChar(decimalSeparator, '.'));
+                numberField.setDecimalSimilarSeparators(decimalSimilarSeparators.getValue());
                 numberField.setValue(value.getValue());
             }
 
