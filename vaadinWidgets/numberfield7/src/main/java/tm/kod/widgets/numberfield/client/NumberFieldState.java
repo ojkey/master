@@ -15,7 +15,7 @@
  */
 package tm.kod.widgets.numberfield.client;
 
-import com.vaadin.shared.ui.textfield.AbstractTextFieldState;
+import com.vaadin.shared.ui.textfield.TextFieldState;
 
 /**
  * Number field state class with shared strings
@@ -23,7 +23,7 @@ import com.vaadin.shared.ui.textfield.AbstractTextFieldState;
  * @author Kerim O.D.
  * 
  */
-public class NumberFieldState extends AbstractTextFieldState {
+public class NumberFieldState extends TextFieldState {
 	/**
 	 * Generated serial version UID
 	 */

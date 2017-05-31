@@ -15,7 +15,8 @@
  */
 package tm.kod.widgets.demo;
 
-import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -34,19 +35,22 @@ import tm.kod.widgets.numberfield.NumberField;
  *
  * @author Kerim O.D.
  */
-public class Numberfield7View extends VerticalLayout implements View {
+class NumberField7View extends VerticalLayout implements View {
 
-    NumberField numberField = new NumberField("<span style=\"font-size: 2.4em;\">Demo NumberField</span>");
-    TextField value = new TextField("Value");
-    Label currentValue = new Label();
-    CheckBox isSigned = new CheckBox("Is signed");
-    CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
-    TextField groupingSeparator = new TextField("Grouping Separator");
-    NumberField decimalLength = new NumberField("Decimal length");
-    TextField decimalSeparator = new TextField("Decimal Separator");
-    TextField decimalSimilarSeparators = new TextField("Decimal Similar Separators");    
+    private final NumberFieldSettings settings = new NumberFieldSettings();
+    private final Binder<NumberFieldSettings> settingsBinder = new Binder<>();
+    private final NumberField numberField = new NumberField("<span style=\"font-size: 2.4em;\">Demo NumberField</span>");
+    private final TextField value = new TextField("Value");
+    private final Label currentValue = new Label();
+    private final CheckBox isSigned = new CheckBox("Is signed");
+    private final CheckBox isUseGrouping = new CheckBox("Is Use Grouping");
+    private final TextField groupingSeparator = new TextField("Grouping Separator");
+    private final NumberField decimalLength = new NumberField("Decimal length");
+    private final TextField decimalSeparator = new TextField("Decimal Separator");
+    private final TextField decimalSimilarSeparators = new TextField("Decimal Similar Separators");
 
-    public Numberfield7View() {
+    NumberField7View() {
+        bindBindersToFields();
         setSizeFull();
         HorizontalLayout content = new HorizontalLayout();
         content.setWidth(700, Sizeable.Unit.PIXELS);
@@ -59,16 +63,8 @@ public class Numberfield7View extends VerticalLayout implements View {
         content.addComponent(form);
         numberField.setWidth(100, Sizeable.Unit.PERCENTAGE);
         numberField.setCaptionAsHtml(true);
-        numberField.setNullRepresentation("");
-        numberField.setImmediate(true);
         form.addComponent(numberField);
-        form.addComponent(new Button("Get current Value:", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                currentValue.setValue(numberField.getValue());
-            }
-        }));
+        form.addComponent(new Button("Get current Value:", event -> currentValue.setValue(numberField.getValue())));
         form.addComponent(currentValue);
         form = new VerticalLayout();
         form.setCaption("<h3>Field Settings</h3>");
@@ -81,11 +77,9 @@ public class Numberfield7View extends VerticalLayout implements View {
         groupingSeparator.setMaxLength(1);
         groupingSeparator.setValue(" ");
         groupingSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
-        decimalLength.setConverter(new StringToIntegerConverter());
-        decimalLength.setConvertedValue(0);
         decimalSeparator.setMaxLength(1);
         decimalSeparator.setValue(".");
-        decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);        
+        decimalSeparator.setWidth(100, Sizeable.Unit.PERCENTAGE);
         decimalSimilarSeparators.setValue(".,");
         decimalSimilarSeparators.setWidth(100, Sizeable.Unit.PERCENTAGE);
         form.addComponent(value);
@@ -95,43 +89,71 @@ public class Numberfield7View extends VerticalLayout implements View {
         form.addComponent(decimalLength);
         form.addComponent(decimalSeparator);
         form.addComponent(decimalSimilarSeparators);
-        Button submitButton = new Button("Reset settings", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                numberField.setSigned(
-                        Boolean.TRUE.equals(isSigned.getValue()));
-                numberField.setUseGrouping(
-                        Boolean.TRUE.equals(isUseGrouping.getValue()));
-                numberField.setGroupingSeparator(
-                        getChar(groupingSeparator, ' '));
-                numberField.setDecimalLength((Integer)decimalLength.getConvertedValue());
-                numberField.setDecimalSeparator(
-                        getChar(decimalSeparator, '.'));
-                numberField.setDecimalSimilarSeparators(decimalSimilarSeparators.getValue());
-                numberField.setValue(value.getValue());
-            }
-
-            char getChar(TextField field, char defaultChar) {
-                String val = field.getValue();
-                if (val == null || val.isEmpty()) {
-                    return defaultChar;
-                }
-                return val.charAt(0);
-            }
-
-            int getInt(NumberField field) {
-                String val = field.getValue();
-                if (val == null) {
-                    return 0;
-                }
-                return Integer.valueOf(field.getValue());
-            }
-        });
+        Button submitButton = new Button("Reset settings", this::onSubmit);
         submitButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         form.addComponent(submitButton);
         form.setComponentAlignment(submitButton, Alignment.BOTTOM_RIGHT);
         submitButton.click();
+    }
+
+    private void bindBindersToFields() {
+        settingsBinder.forField(numberField)
+                .bind(
+                        NumberFieldSettings::getNumber,
+                        NumberFieldSettings::setNumber);
+        settingsBinder.forField(value)
+                .bind(
+                        NumberFieldSettings::getValue,
+                        NumberFieldSettings::setValue);
+        settingsBinder.forField(isSigned)
+                .bind(
+                        NumberFieldSettings::getSigned,
+                        NumberFieldSettings::setSigned);
+        settingsBinder.forField(isUseGrouping)
+                .bind(
+                        NumberFieldSettings::getUseGrouping,
+                        NumberFieldSettings::setUseGrouping);
+        settingsBinder.forField(groupingSeparator)
+                .bind(
+                        NumberFieldSettings::getGroupingSeparator,
+                        NumberFieldSettings::setGroupingSeparator);
+        settingsBinder.forField(decimalLength).withConverter(new StringToIntegerConverter("Invalid number value"))
+                .bind(
+                        NumberFieldSettings::getDecimalLength,
+                        NumberFieldSettings::setDecimalLength);
+        settingsBinder.forField(decimalSeparator)
+                .bind(
+                        NumberFieldSettings::getDecimalSeparator,
+                        NumberFieldSettings::setDecimalSeparator);
+        settingsBinder.forField(decimalSimilarSeparators)
+                .bind(
+                        NumberFieldSettings::getDecimalSimilarSeparators,
+                        NumberFieldSettings::setDecimalSimilarSeparators);
+        settingsBinder.readBean(settings);
+    }
+
+    private void onSubmit(Button.ClickEvent event) {
+        boolean isValid = settingsBinder.writeBeanIfValid(settings);
+        if (isValid) {
+            numberField.setSigned(
+                    Boolean.TRUE.equals(isSigned.getValue()));
+            numberField.setUseGrouping(
+                    Boolean.TRUE.equals(isUseGrouping.getValue()));
+            numberField.setGroupingSeparator(
+                    getChar(settings.getGroupingSeparator(), ' '));
+            numberField.setDecimalLength(settings.getDecimalLength());
+            numberField.setDecimalSeparator(
+                    getChar(settings.getDecimalSeparator(), '.'));
+            numberField.setDecimalSimilarSeparators(decimalSimilarSeparators.getValue());
+            numberField.setValue(settings.getValue());
+        }
+    }
+
+    private char getChar(String val, char defaultChar) {
+        if (val == null || val.isEmpty()) {
+            return defaultChar;
+        }
+        return val.charAt(0);
     }
 
     @Override

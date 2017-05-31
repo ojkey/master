@@ -41,7 +41,7 @@ public class DemoUI extends UI {
     protected void init(VaadinRequest request) {
         navigator = new Navigator(this, this);
         navigator.addView("", new MainView());
-        navigator.addView("numberfield7", new Numberfield7View());
+        navigator.addView("numberfield7", new NumberField7View());
         navigator.addView("webcamjs", new WebCamJSView());
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();

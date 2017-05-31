@@ -16,6 +16,9 @@
 package tm.kod.widgets.demo;
 
 import com.google.gwt.thirdparty.guava.common.io.BaseEncoding;
+import com.vaadin.data.Binder;
+import com.vaadin.data.Converter;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -28,26 +31,28 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import tm.kod.widgets.numberfield.NumberField;
 import tm.kod.widgets.webcamjs.WebCamJS;
+
+import java.io.ByteArrayInputStream;
 
 /**
  *
  * @author Kerim O.D.
  */
-public class WebCamJSView extends VerticalLayout implements View {
+class WebCamJSView extends VerticalLayout implements View {
 
-    WebCamJS webCam = new WebCamJS("Webcam");
-    Image image = new Image("Image");
-    HorizontalLayout buttons = new HorizontalLayout();
+    private final WebCamSettings settings = new WebCamSettings();
+    private final Binder<WebCamSettings> settingsBinder = new Binder<>();
+    private final WebCamJS webCam = new WebCamJS("Webcam");
+    private final Image image = new Image("Image");
+    private final HorizontalLayout buttons = new HorizontalLayout();
 
-    public WebCamJSView() {
+    WebCamJSView() {
+        settingsBinder.readBean(settings);
         setSizeFull();
         VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);
@@ -63,28 +68,8 @@ public class WebCamJSView extends VerticalLayout implements View {
         content.addComponent(layout);
         image.setHeight(240, Sizeable.Unit.PIXELS);
         image.setWidth(320, Sizeable.Unit.PIXELS);
-        webCam.addReadyListener(new WebCamJS.ReadyListener() {
-
-            @Override
-            public void ready(WebCamJS.ReadyEvent e) {
-                buttons.setVisible(true);
-            }
-        });
-        webCam.addSnapReceivedListener(new WebCamJS.SnapReceivedListener() {
-
-            @Override
-            public void received(final WebCamJS.ReceivedEvent e) {
-                StreamResource sr = new StreamResource(new StreamResource.StreamSource() {
-
-                    @Override
-                    public InputStream getStream() {
-                        byte[] bytes = BaseEncoding.base64().decode(e.getBase64String());
-                        return new ByteArrayInputStream(bytes);
-                    }
-                }, System.currentTimeMillis() + ".jpeg");
-                image.setSource(sr);
-            }
-        });
+        webCam.addReadyListener(e -> buttons.setVisible(true));
+        webCam.addSnapReceivedListener(this::onReceived);
         layout.addComponent(webCam);
         layout.addComponent(image);
         layout.addComponent(createConfiguration());
@@ -93,35 +78,14 @@ public class WebCamJSView extends VerticalLayout implements View {
         buttons.setSpacing(true);
         content.addComponent(buttons);
         // init freeze button
-        Button button = new Button("Freeze", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                webCam.freeze();
-            }
-        });
-        buttons.addComponent(button);
+        buttons.addComponent(new Button("Freeze", e -> webCam.freeze()));
         // initing unfreeze button
-        button = new Button("Unfreeze", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                webCam.unfreeze();
-            }
-        });
-        buttons.addComponent(button);
+        buttons.addComponent(new Button("Unfreeze", e -> webCam.unfreeze()));
         // initing snapshoot button
-        button = new Button("Upload (Snap)", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                webCam.snap();
-            }
-        });
+        Button button = new Button("Upload (Snap)", e -> webCam.snap());
         button.addStyleName(ValoTheme.BUTTON_PRIMARY);
         buttons.addComponent(button);
     }
-
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("WebCamJS Demo View");
@@ -137,43 +101,58 @@ public class WebCamJSView extends VerticalLayout implements View {
         layout.addComponent(form);
         // cam width
         final NumberField camWidth = new NumberField("Cam width(pixels)");
-        camWidth.setConverter(Integer.class);
-        camWidth.setConvertedValue(webCam.getCamWidth());
+        settingsBinder.forField(camWidth).withConverter(createNumberConverter())
+                .bind(
+                        WebCamSettings::getWidth,
+                        WebCamSettings::setWidth);
         camWidth.setWidth(100, Unit.PERCENTAGE);
         form.addComponent(camWidth);
         // cam height
         final NumberField camHeight = new NumberField("Cam height(pixels)");
-        camHeight.setConverter(Integer.class);
-        camHeight.setConvertedValue(webCam.getCamHeight());
+        settingsBinder.forField(camHeight).withConverter(createNumberConverter())
+                .bind(
+                        WebCamSettings::getHeight,
+                        WebCamSettings::setHeight);
+
         camHeight.setWidth(100, Unit.PERCENTAGE);
         form.addComponent(camHeight);
         // image quality
-        final Slider quality = new Slider("Image Quality(0-100)", 0, 100);
+        Slider quality = new Slider("Image Quality(0-100)", 0, 100);
+        settingsBinder.forField(quality)
+                .bind(
+                        WebCamSettings::getQuality,
+                        WebCamSettings::setQuality);
         quality.setWidth(100, Unit.PERCENTAGE);
-        quality.setValue(new Double(webCam.getQuality()));
+        quality.setValue((double) webCam.getQuality());
         form.addComponent(quality);
-        Button reset = new Button("Reset", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                try {
-                    int intValue = nvl(camWidth.getConvertedValue(), 320);
-                    webCam.setCamWidth(intValue);
-                    webCam.setWidth(intValue, Unit.PIXELS);
-                    intValue = nvl(camHeight.getConvertedValue(), 240);
-                    webCam.setCamHeight(intValue);
-                    webCam.setHeight(intValue, Unit.PIXELS);
-                    webCam.setQuality(quality.getValue().intValue());
-                } catch(Exception ex) {
-                    Notification.show("Reset failed", 
-                            ex.getMessage(), Notification.Type.ERROR_MESSAGE);
-                }
-            }
-        });
+        Button reset = new Button("Reset", this::onReset);
         form.addComponent(reset);
         return layout;
     }
-    
+
+    private Converter<String, Integer> createNumberConverter() {
+        return new StringToIntegerConverter("Invalid int value");
+    }
+
+    void onReceived(final WebCamJS.ReceivedEvent e) {
+        StreamResource sr = new StreamResource(() -> new ByteArrayInputStream(BaseEncoding.base64().decode(e.getBase64String())),
+                System.currentTimeMillis() + ".jpeg");
+        image.setSource(sr);
+    }
+
+    private void onReset(Button.ClickEvent event) {
+        boolean isValid = settingsBinder.writeBeanIfValid(settings);
+        if (isValid) {
+            int intValue = nvl(settings.getWidth(), 320);
+            webCam.setCamWidth(intValue);
+            webCam.setWidth(intValue, Unit.PIXELS);
+            intValue = nvl(settings.getHeight(), 240);
+            webCam.setCamHeight(intValue);
+            webCam.setHeight(intValue, Unit.PIXELS);
+            webCam.setQuality(settings.getQuality().intValue());
+        }
+    }
+
     private int nvl(Object value, int defValue) {
         if(value == null) {
             return defValue;

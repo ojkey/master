@@ -140,7 +140,6 @@ public class WebCamJS extends AbstractComponent {
     public WebCamJS() {
         setHeight(240, Unit.PIXELS);
         setWidth(320, Unit.PIXELS);
-        setImmediate(true);
         // To receive events from the client, we register ServerRpc
         registerRpc(rpc);
     }

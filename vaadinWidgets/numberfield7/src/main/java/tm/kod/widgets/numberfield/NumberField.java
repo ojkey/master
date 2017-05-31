@@ -70,7 +70,7 @@ public class NumberField extends TextField {
     }
 
     @Override
-    public void setValue(String value) throws ReadOnlyException {
+    public void setValue(String value) {
         // format value if is not empty 
         if (value != null) {
             value = formatValue(value);
