@@ -1,7 +1,7 @@
 @use "../../styles/component";
 
-$size-regular = 40px;
-$size-small = 18px;
+$size-regular: 40px;
+$size-small: 18px;
 
 :host {
   @include component.flex-centered;
@@ -17,6 +17,9 @@ $size-small = 18px;
   &.small {
     width: $size-small;
     height: $size-small;
-    font-size: $size-small;
+
+    .material-icons {
+      font-size: $size-small;
+    }
   }
 }

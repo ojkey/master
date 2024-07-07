@@ -9,3 +9,4 @@ export * from './lib/glam-select/glam-select.component';
 export * from './lib/glam-select-panel/glam-select-panel.component';
 export * from './lib/glam-weekdays/glam-weekdays.component';
 export * from './lib/glam-days/glam-days.component';
+export * from './lib/components';

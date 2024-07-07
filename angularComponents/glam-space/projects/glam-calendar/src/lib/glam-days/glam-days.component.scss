@@ -1,3 +1,4 @@
+@use "../styles/component";
 .content {
 
   .week {
@@ -5,17 +6,13 @@
   }
 
   .date-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include component.flex-centered;
     width: 48px;
     height: 48px;
     color: #49454fcf;
 
     .date-state {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include component.flex-centered;
       width: 38px;
       height: 38px;
       border: 1px solid transparent;
@@ -27,10 +24,10 @@
     }
 
     &.today {
-      color: #6750A4;
+      color: component.$primary-color;
 
       .date-state {
-        border-color: #6750A4;
+        border-color: component.$primary-color;
       }
     }
   }
