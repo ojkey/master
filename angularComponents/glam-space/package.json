@@ -5,7 +5,7 @@
     "build-calendar": "ng build glam-calendar",
     "build-watch-calendar": "ng build glam-calendar --watch --configuration development",
     "pack-calendar": "cd dist/glam-calendar && npm pack",
-    "start": "ng serve demo",
+    "start-demo": "ng serve demo",
     "ng": "ng",
     "build": "ng build",
     "test": "ng test",
@@ -24,6 +24,7 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3",
+    "date-fns": "^3.6.0",
     "@mamlapke/glam-calendar": "0.0.1"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { GlamCalendarComponent } from 'glam-calendar';
+import { GlamCalendarModule } from 'glam-calendar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ RouterOutlet, GlamCalendarComponent ],
+  imports: [ RouterOutlet, GlamCalendarModule ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

@@ -1,0 +1,7 @@
+<div class="content">
+  <div *ngFor="let options of optionGroups" class="week" >
+    <div *ngFor="let option of options" class="date-container" [ngClass]="getClass(option)">
+      <div class="date-state">{{option.label}}</div>
+    </div>
+  </div>
+</div>

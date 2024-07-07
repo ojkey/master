@@ -1,0 +1,23 @@
+.content {
+  display: flex;
+  align-items: center;
+  color: #49454F;
+
+  .menu-button {
+    display: flex;
+    align-items: center;
+  }
+
+  .menu-button-label {
+    font-size: 14px;
+  }
+
+  .menu-button-open {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

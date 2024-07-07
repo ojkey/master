@@ -1,0 +1,22 @@
+@use "../../styles/component";
+
+$size-regular = 40px;
+$size-small = 18px;
+
+:host {
+  @include component.flex-centered;
+  width: $size-regular;
+  height: $size-regular;
+  cursor: pointer;
+
+  &.regular {
+    width: $size-regular;
+    height: $size-regular;
+  }
+
+  &.small {
+    width: $size-small;
+    height: $size-small;
+    font-size: $size-small;
+  }
+}

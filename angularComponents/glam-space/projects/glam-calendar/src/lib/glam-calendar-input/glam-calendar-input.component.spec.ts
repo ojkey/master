@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GlamCalendarComponent } from './glam-calendar.component';
+import { GlamCalendarInputComponent } from './glam-calendar-input.component';
 
 describe('GlamCalendarComponent', () => {
-  let component: GlamCalendarComponent;
-  let fixture: ComponentFixture<GlamCalendarComponent>;
+  let component: GlamCalendarInputComponent;
+  let fixture: ComponentFixture<GlamCalendarInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GlamCalendarComponent]
+      imports: [GlamCalendarInputComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GlamCalendarComponent);
+    fixture = TestBed.createComponent(GlamCalendarInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

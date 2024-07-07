@@ -1,0 +1,11 @@
+<div class="content">
+  <div class="year-month-content">
+    <glam-select [options]="service.months" [value]="9"></glam-select>
+    <glam-select [options]="service.years" [value]="2024"></glam-select>
+  </div>
+  <div>
+<!--    <glam-select-panel></glam-select-panel>-->
+    <glam-weekdays [options]="service.weekDays"></glam-weekdays>
+    <glam-days [options]="service.days"></glam-days>
+  </div>
+</div>
