@@ -1,5 +1,38 @@
 # GlamSpace
 
+1. Generate:
+```
+ng new glam-space --no-create-application
+cd glam-space
+ng generate library glam-calendar
+ng generate application demo
+```
+2. Modify angular.json
+```jsonc
+"demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/demo",
+      "sourceRoot": "projects/demo/src",
+      "prefix": "app",
+      "architect": {
+        "preserveSymlinks": true, // <== add this line        
+```
+3. Change prefix in projects/glam-calendar/eslint.config.js
+4. Add next commands into root package.json
+```jsonc
+"scripts": {
+    "build-calendar": "ng build glam-calendar",
+    "build-watch-calendar": "ng build glam-calendar --watch --configuration development",
+    "pack-calendar": "cd dist/glam-calendar && npm pack",
+    "start": "ng serve demo",
+    // ...
+}
+```
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.7.
 
 ## Development server
