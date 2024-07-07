@@ -17,6 +17,11 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
+ng build glam-calendar --configuration development
+ng test glam-calendar
+ng lint glam-calendar
+```
 
 ## Running end-to-end tests
 
