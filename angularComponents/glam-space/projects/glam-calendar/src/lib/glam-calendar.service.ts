@@ -6,6 +6,7 @@ import { endOfMonth } from 'date-fns/endOfMonth';
 import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
 import { addDays } from 'date-fns/addDays';
 import { isDateEquals } from './model/utils';
+import { parseISO } from 'date-fns/parseISO';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class GlamCalendarService {
 
   public days = createDayOptions(2024, 6, this.weekDays[0].value);
 
-  public selected = new Date();
+  public selected = parseISO('2024-07-11');
 }
 
 

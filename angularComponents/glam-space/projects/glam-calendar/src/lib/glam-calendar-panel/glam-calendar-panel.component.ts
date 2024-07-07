@@ -8,9 +8,6 @@ import { GlamCalendarService } from '../glam-calendar.service';
 })
 export class GlamCalendarPanelComponent {
 
-  @Input()
-  value?: Date;
-
   constructor(protected service: GlamCalendarService) {
   }
 }

@@ -31,5 +31,13 @@
         border-color: component.$primary-color;
       }
     }
+
+    &.selected {
+      color: #fff;
+      .date-state {
+        border-color: component.$primary-color;
+        background-color: component.$primary-color;
+      }
+    }
   }
 }
