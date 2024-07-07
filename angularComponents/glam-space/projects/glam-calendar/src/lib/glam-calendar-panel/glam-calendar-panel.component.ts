@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Option } from '../model/option';
+import { Component, Input } from '@angular/core';
 import { GlamCalendarService } from '../glam-calendar.service';
 
 @Component({
@@ -8,6 +7,9 @@ import { GlamCalendarService } from '../glam-calendar.service';
   styleUrls: ['./glam-calendar-panel.component.scss', '../styles/core.scss']
 })
 export class GlamCalendarPanelComponent {
+
+  @Input()
+  value?: Date;
 
   constructor(protected service: GlamCalendarService) {
   }

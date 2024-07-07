@@ -1,0 +1,26 @@
+@use "../../styles/component";
+
+$size-regular: 40px;
+$size-small: 18px;
+
+button {
+  @include component.flex-centered;
+  height: $size-regular;
+  cursor: pointer;
+  font-size: 14px;
+  background: none;
+  border: none;
+  padding: 14px;
+
+  &.regular {
+    height: $size-regular;
+  }
+
+  &.small {
+    height: $size-small;
+
+    .material-icons {
+      font-size: $size-small;
+    }
+  }
+}

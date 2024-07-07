@@ -1,12 +1,25 @@
 .content {
-  width: 328px;
-  height: 428px;
+  width: 360px;
+  height: 460px;
   background: #ECE6F0;
-  padding: 20px 16px;
   border-radius: 16px;
 }
-.year-month-content {
+.header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  height: 40px;
+  height: 64px;
+  padding: 0 12px;
+}
+
+.footer {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+
+  .right {
+    display: flex;
+  }
 }
