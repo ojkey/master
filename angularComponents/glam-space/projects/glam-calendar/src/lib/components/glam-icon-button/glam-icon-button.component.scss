@@ -4,22 +4,23 @@ $size-regular: 40px;
 $size-small: 18px;
 
 :host {
-  @include component.flex-centered;
-  width: $size-regular;
-  height: $size-regular;
-  cursor: pointer;
+  display: inline-block;
 
-  &.regular {
+  .material-icons {
+    @include component.flex-centered;
+    width: $size-regular;
+    height: $size-regular;
+    cursor: pointer;
+  }
+
+  &.regular .material-icons {
     width: $size-regular;
     height: $size-regular;
   }
 
-  &.small {
+  &.small .material-icons {
     width: $size-small;
     height: $size-small;
-
-    .material-icons {
-      font-size: $size-small;
-    }
+    font-size: $size-small;
   }
 }

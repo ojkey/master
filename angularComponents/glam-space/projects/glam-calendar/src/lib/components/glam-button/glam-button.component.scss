@@ -3,6 +3,45 @@
 $size-regular: 40px;
 $size-small: 18px;
 
+:host {
+  display: inline-block;
+
+  &.size-regular button {
+    height: $size-regular;
+  }
+
+  &.size-small button {
+    height: $size-small;
+  }
+
+  &.state-enabled button {
+    color: component.$primary-color;
+  }
+
+  &.state-hovered button {
+    color: component.$primary-color;
+    border-radius: 16px;
+    background-color: component.$hovered-background;
+  }
+
+  &.state-focused button {
+    color: component.$primary-color;
+    border-radius: 16px;
+    background-color: component.$focused-background;
+  }
+
+  &.state-pressed button {
+    color: component.$primary-color;
+    border-radius: 16px;
+    background-color: component.$focused-background;
+  }
+
+  &.state-disabled button {
+    color: component.$disabled-color;
+    cursor: default;
+  }
+}
+
 button {
   @include component.flex-centered;
   height: $size-regular;
@@ -11,16 +50,4 @@ button {
   background: none;
   border: none;
   padding: 14px;
-
-  &.regular {
-    height: $size-regular;
-  }
-
-  &.small {
-    height: $size-small;
-
-    .material-icons {
-      font-size: $size-small;
-    }
-  }
 }
