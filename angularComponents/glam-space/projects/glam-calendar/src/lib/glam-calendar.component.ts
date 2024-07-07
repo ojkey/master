@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-glam-calendar',
+  selector: 'glam-calendar',
   standalone: true,
   imports: [],
   template: `
