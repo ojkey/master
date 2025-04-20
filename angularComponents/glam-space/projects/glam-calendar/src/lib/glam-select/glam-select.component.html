@@ -1,8 +1,8 @@
 <div class="content">
-  <glam-icon-button icon="keyboard_arrow_left"/>
-  <div class="menu-button">
+  <glam-icon-button icon="keyboard_arrow_left" (click)="onMove(-1)"/>
+  <div class="menu-button" (click)="onOpenPanel($event)">
     <span class="menu-button-label">{{label}}</span>
     <glam-icon-button icon="arrow_drop_down" size="small"/>
   </div>
-  <glam-icon-button icon="keyboard_arrow_right"/>
+  <glam-icon-button icon="keyboard_arrow_right" (click)="onMove(1)"/>
 </div>
